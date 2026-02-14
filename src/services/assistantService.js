@@ -136,3 +136,23 @@ export async function getMetrics(limit = 10) {
   });
   return data.interactions;
 }
+
+export async function generateCodeSnippet(payload) {
+  const token = await getUserToken(true);
+  if (!token) throw new Error("No authenticated user");
+
+  const { data } = await axios.post(`${BASE_URL}/generate`, payload, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return data.code;
+}
+
+export async function getAutocompleteSuggestion(payload) {
+  const token = await getUserToken(true);
+  if (!token) throw new Error("No authenticated user");
+
+  const { data } = await axios.post(`${BASE_URL}/autocomplete`, payload, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return data.suggestion;
+}

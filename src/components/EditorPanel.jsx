@@ -17,13 +17,6 @@ import {
   autocompleteService,
 } from "../services/editorService.js";
 
-/**
- * Language mapping for code execution services.
- * Maps language names to backend language IDs.
- *
- * @constant
- * @type {Object<string, number>}
- */
 const languageMap = {
   javascript: 63,
   python: 71,
@@ -31,29 +24,6 @@ const languageMap = {
   java: 62,
 };
 
-/**
- * EditorPanel Component
- *
- * @function EditorPanel
- * @param {Object} props - Component props.
- * @param {string} props.code - Current code in the editor.
- * @param {Function} props.setCode - Setter function to update the code.
- * @param {string} props.language - Programming language selected.
- * @param {Object} props.editorRef - Ref object to access the Monaco editor instance.
- * @param {Function} props.showSnackbar - Function to show notifications.
- * @param {Function} props.setExecutionResult - Setter function to update execution results.
- * @returns {JSX.Element} Editor panel component with Monaco editor and controls.
- *
- * @example
- * <EditorPanel
- *   code={sourceCode}
- *   setCode={setSourceCode}
- *   language="javascript"
- *   editorRef={editorRef}
- *   showSnackbar={showSnackbar}
- *   setExecutionResult={setExecutionResult}
- * />
- */
 const EditorPanel = ({
   code,
   setCode,
@@ -62,18 +32,9 @@ const EditorPanel = ({
   showSnackbar,
   setExecutionResult,
 }) => {
-  /**
-   * Lints code using backend service and displays markers in the editor.
-   *
-   * @async
-   * @function lintCode
-   * @param {string} code - Code to lint.
-   * @returns {Promise<void>} Resolves when linting markers are applied.
-   */
   const lintCode = async (code) => {
     try {
       const data = await lintCodeService(code, language);
-
       const markers = Array.isArray(data.messages)
         ? data.messages.map((msg) => ({
             startLineNumber: msg.line,
@@ -101,13 +62,6 @@ const EditorPanel = ({
     }
   };
 
-  /**
-   * Executes code using backend service and updates execution result.
-   *
-   * @async
-   * @function handleRunCode
-   * @returns {Promise<void>} Resolves when execution result is updated.
-   */
   const handleRunCode = async () => {
     const languageId = languageMap[language];
     try {
@@ -119,30 +73,43 @@ const EditorPanel = ({
     }
   };
 
-  /**
-   * Sets up autocomplete suggestions using backend service.
-   *
-   * @function setupAutocomplete
-   * @param {Object} editor - Monaco editor instance.
-   * @param {Object} monacoInstance - Monaco instance.
-   * @returns {void}
-   */
   const setupAutocomplete = (editor, monacoInstance) => {
-    let debounceTimer;
-
-    editor.onDidChangeModelContent(() => {
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Space, async () => {
       const currentCode = editor.getValue();
-      clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => {
-        autocompleteCode(currentCode);
-      }, 1500);
+      try {
+        const data = await autocompleteService(currentCode, language);
+        if (data.suggestion) {
+          editor.executeEdits("", [
+            {
+              range: editor.getSelection(),
+              text: data.suggestion,
+              forceMoveMarkers: true,
+            },
+          ]);
+          showSnackbar("✨ Autocomplete applied");
+        }
+      } catch (error) {
+        console.error("❌ Error fetching autocomplete:", error);
+      }
+    });
+
+    editor.onDidType(async (text) => {
+      if (text === "." || text === "(") {
+        try {
+          const data = await autocompleteService(editor.getValue(), language);
+          if (data.suggestion) {
+            showSnackbar("💡 Suggestion: " + data.suggestion.slice(0, 60) + "...");
+          }
+        } catch (error) {
+          console.error("❌ Error fetching autocomplete:", error);
+        }
+      }
     });
 
     monacoInstance.languages.registerCompletionItemProvider(language, {
       provideCompletionItems: async () => {
         try {
           const data = await autocompleteService(editor.getValue(), language);
-
           return {
             suggestions: [
               {
@@ -161,25 +128,6 @@ const EditorPanel = ({
     });
   };
 
-  /**
-   * Fetches autocomplete suggestions and shows them in a snackbar.
-   *
-   * @async
-   * @function autocompleteCode
-   * @param {string} code - Current code in editor.
-   * @returns {Promise<void>} Resolves when suggestions are fetched and displayed.
-   */
-  const autocompleteCode = async (code) => {
-    try {
-      const data = await autocompleteService(code, language);
-      if (data.suggestion) {
-        showSnackbar("💡 Suggestion: " + data.suggestion.slice(0, 60) + "...");
-      }
-    } catch (error) {
-      console.error("❌ Error fetching autocomplete:", error);
-    }
-  };
-
   useEffect(() => {
     const handleResize = () => {
       if (editorRef.current) {
@@ -191,16 +139,7 @@ const EditorPanel = ({
   }, [editorRef]);
 
   return (
-    <Paper
-      elevation={3}
-      sx={{
-        mt: 2,
-        p: 2,
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
+    <Paper elevation={3} sx={{ mt: 2, p: 2, height: "100%", display: "flex", flexDirection: "column" }}>
       <Box sx={{ flex: 1, minHeight: 400 }}>
         <MonacoEditor
           height="100%"

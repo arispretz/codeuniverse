@@ -23,6 +23,8 @@ import ReactMarkdown from "react-markdown";
 import {
   getAssistantReply,
   getAssistantCodeReply,
+  generateCodeSnippet,
+  getAutocompleteSuggestion,
 } from "../services/assistantService.js";
 
 import { cleanMentorOutput } from "../utils/cleanMentorOutput";
@@ -78,69 +80,58 @@ const AssistantSidebar = ({
    * @returns {Promise<void>} Resolves when the assistant response is processed.
    */
   const handleAssistantRequest = async () => {
-    if (!chatInput.trim()) return;
-    setIsTyping(true);
+  if (!chatInput.trim()) return;
+  setIsTyping(true);
 
-    try {
-      const userId = import.meta.env.VITE_ASSISTANT_USER_ID;
-      if (!userId) {
-        throw new Error("Missing environment variable: VITE_ASSISTANT_USER_ID");
-      }
+  try {
+    const userId = import.meta.env.VITE_ASSISTANT_USER_ID;
+    if (!userId) throw new Error("Missing environment variable: VITE_ASSISTANT_USER_ID");
 
-      const payload = {
-        prompt: chatInput,
-        code,
-        language,
-        user_id: userId,
-        user_level: userLevel,
-      };
+    const payload = {
+      prompt: chatInput,
+      code,
+      language,
+      user_id: userId,
+      user_level: userLevel,
+    };
 
-      const userMessage = { role: "user", content: chatInput };
+    const userMessage = { role: "user", content: chatInput };
+    let assistantMessage = { role: "assistant", content: "" };
 
-      if (assistantMode === "mentor") {
-        const replyText = await getAssistantReply(payload);
-
-        const isError =
-          typeof replyText === "string" && replyText.startsWith("⚠️");
-        const safeText = isError
+    if (assistantMode === "mentor") {
+      const replyText = await getAssistantReply(payload);
+      const safeText =
+        typeof replyText === "string" && replyText.startsWith("⚠️")
           ? "Step 1: Summarize the goal of the code.\nStep 2: Explain the main flow.\nStep 3: Mention edge cases.\n\nLimitation: May not handle invalid inputs."
           : replyText;
-
-        const cleanReply = cleanMentorOutput(safeText);
-        const assistantMessage = {
-          role: "assistant",
-          content: cleanReply || "",
-        };
-        setChatHistory((prev) => [...prev, userMessage, assistantMessage]);
-      } else {
-        const codeReply = await getAssistantCodeReply(payload);
-        if (codeReply) {
-          setCode(codeReply);
-          showSnackbar("✨ Code inserted into the editor");
-          const assistantMessage = {
-            role: "assistant",
-            content: "✅ Code generated and applied in the editor.",
-          };
-          setChatHistory((prev) => [...prev, userMessage, assistantMessage]);
-        } else {
-          setChatHistory((prev) => [
-            ...prev,
-            userMessage,
-            { role: "assistant", content: "❌ Could not generate code." },
-          ]);
-        }
+      assistantMessage.content = cleanMentorOutput(safeText);
+    } else if (assistantMode === "code") {
+      let codeReply = await getAssistantCodeReply(payload);
+      if (!codeReply) {
+        // fallback automático a /generate
+        codeReply = await generateCodeSnippet(payload);
       }
-    } catch (error) {
-      console.error("❌ Error in assistant:", error);
-      setChatHistory((prev) => [
-        ...prev,
-        { role: "assistant", content: "❌ Error generating response." },
-      ]);
-    } finally {
-      setIsTyping(false);
-      setChatInput("");
+      if (codeReply) {
+        setCode(codeReply);
+        showSnackbar("✨ Code inserted into the editor");
+        assistantMessage.content = "✅ Code generated and applied in the editor.";
+      } else {
+        assistantMessage.content = "❌ Could not generate code.";
+      }
     }
-  };
+
+    setChatHistory((prev) => [...prev, userMessage, assistantMessage]);
+  } catch (error) {
+    console.error("❌ Error in assistant:", error);
+    setChatHistory((prev) => [
+      ...prev,
+      { role: "assistant", content: "❌ Error generating response." },
+    ]);
+  } finally {
+    setIsTyping(false);
+    setChatInput("");
+  }
+};
 
   return (
     <Box
