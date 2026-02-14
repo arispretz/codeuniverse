@@ -99,6 +99,7 @@ export function AuthProvider({ children }) {
         setRole(null);
         setUserMongoId(null);
         localStorage.removeItem("token");
+        navigate("/");
       }
       setLoading(false);
     });

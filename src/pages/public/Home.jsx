@@ -17,7 +17,7 @@ import {
   CardContent,
   CardMedia,
 } from '@mui/material';
-
+import { AuthContext } from '../../context/AuthContext';
 import LucyImg from '../../assets/images/Lucy.png';
 import CharlesImg from '../../assets/images/Charles.png';
 import DanielImg from '../../assets/images/Daniel.png';
@@ -57,10 +57,19 @@ const testimonials = [
 const Home = () => {
   const theme = useTheme();
   const textColor = theme.palette.text.primary;
+  const { isAuthenticated, user } = useContext(AuthContext);
 
   return (
     <Box>
       <Container maxWidth="md">
+        {/* Conditional welcome message */}
+        <Typography variant="h4" gutterBottom>
+          {isAuthenticated
+            ? `Welcome ${user.displayName || user.email}`
+            : 'Welcome, please log in'}
+        </Typography>
+
+        {/* Landing page content */}
         <Typography variant="h3" gutterBottom>
           Collaboration and Project Management Platform for Developers
         </Typography>

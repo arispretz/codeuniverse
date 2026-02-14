@@ -17,6 +17,8 @@ import {
   Typography,
   CircularProgress,
 } from "@mui/material";
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebase/auth"; 
 
 /**
  * LogoutModal Component
@@ -24,7 +26,6 @@ import {
  * @function LogoutModal
  * @param {Object} props - Component props.
  * @param {boolean} props.open - Controls whether the modal is open.
- * @param {Function} props.onConfirm - Callback triggered when the user confirms logout.
  * @param {Function} props.onCancel - Callback triggered when the user cancels logout.
  * @param {boolean} props.loading - Indicates whether the logout process is in progress.
  * @returns {JSX.Element} A modal dialog component for logout confirmation.
@@ -32,12 +33,21 @@ import {
  * @example
  * <LogoutModal
  *   open={isModalOpen}
- *   onConfirm={handleLogout}
  *   onCancel={handleCancel}
  *   loading={isLoggingOut}
  * />
  */
-const LogoutModal = ({ open, onConfirm, onCancel, loading }) => {
+const LogoutModal = ({ open, onCancel, loading }) => {
+  const handleConfirmLogout = async () => {
+    try {
+      // Trigger Firebase logout
+      await signOut(auth);
+      // No need to manually clear context here — AuthProvider handles it
+    } catch (err) {
+      console.error("Logout error:", err);
+    }
+  };
+
   return (
     <Dialog
       open={open}
@@ -72,7 +82,7 @@ const LogoutModal = ({ open, onConfirm, onCancel, loading }) => {
       {/* Dialog actions */}
       <DialogActions>
         <Button
-          onClick={onConfirm}
+          onClick={handleConfirmLogout}
           variant="contained"
           color="primary"
           disabled={loading}
