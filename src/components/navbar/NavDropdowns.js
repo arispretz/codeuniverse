@@ -33,6 +33,6 @@ export const navDropdowns = {
   ],
   Developers: [
     { label: 'For Developers', to: '/developers' },
-    { label: 'Docs / Help Center', to: '/docs' }
+    { label: 'Docs / Help Center', to: '/help' }
   ],
 };

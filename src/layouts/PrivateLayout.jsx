@@ -232,7 +232,7 @@ export function PrivateLayout({ children }) {
             <MenuItem
               onClick={() => {
                 handleMenuClose();
-                navigate("/logout"); // 👈 now handled via route-based modal
+                navigate("/modal/logout");
               }}
               sx={{ color: "error.main" }}
               autoFocus={false}

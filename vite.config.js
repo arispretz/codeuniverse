@@ -19,7 +19,10 @@ export default defineConfig(({ mode }) => {
     // 🔹 Plugins
     plugins: [
       react(),
-      monacoEditorPlugin.default({}), 
+      monacoEditorPlugin.default({
+        languageWorkers: ["editorWorkerService", "typescript", "json"], 
+        globalAPI: true,
+      }), 
     ],
 
     // 🔹 Base path 

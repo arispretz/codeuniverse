@@ -87,7 +87,7 @@ const OutputPanel = ({ executionResult, language = "javascript" }) => {
     URL.revokeObjectURL(url);
   };
 
-  const isError = output && output.toLowerCase().includes(/^Error:/);
+const isError = output && output.toLowerCase().startsWith("error:");
 
   return (
     <Paper elevation={2} sx={{ p: 2, height: "100%", overflow: "auto" }}>
