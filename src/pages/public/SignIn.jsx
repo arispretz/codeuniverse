@@ -33,14 +33,6 @@ import AuthProviderButton from '../../components/AuthProviderButton.jsx';
 import { setPersistence, browserLocalPersistence } from 'firebase/auth';
 import { getRedirectForRole } from '../../utils/getRedirectForRole.js';
 
-/**
- * SignIn component.
- * Provides authentication via email/password or social providers (Google, GitHub).
- * Handles both sign-in and registration flows with error handling and redirects.
- *
- * @function SignIn
- * @returns {JSX.Element} Sign-in page layout
- */
 const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -56,9 +48,7 @@ const SignIn = () => {
   const { isAuthenticated, role, loading: userLoading, setUser, setRole } = useUser();
   const hasHandledRedirect = useRef(false);
 
-  /**
-   * Redirects authenticated users away from auth pages.
-   */
+  // 🔀 Redirect authenticated users away from auth pages
   useEffect(() => {
     const authPages = ['/sign-in', '/register'];
     const currentPath = location.pathname;
@@ -69,9 +59,7 @@ const SignIn = () => {
     }
   }, [isAuthenticated, userLoading, role, navigate, fromPath, location.pathname]);
 
-  /**
-   * Checks for redirect results from OAuth providers.
-   */
+  // 🔀 Handle OAuth redirect results
   useEffect(() => {
     const checkRedirectResult = async () => {
       if (hasHandledRedirect.current) return;
@@ -92,10 +80,7 @@ const SignIn = () => {
     checkRedirectResult();
   }, [navigate, setUser, setRole]);
 
-  /**
-   * Handles OAuth sign-in via Google or GitHub.
-   * @param {string} providerName - The provider to use ("google" or "github").
-   */
+  // 🔀 Handle OAuth sign-in
   const handleSocialRedirect = async (providerName) => {
     setError('');
     setIsSubmitting(true);
@@ -117,9 +102,7 @@ const SignIn = () => {
     }
   };
 
-  /**
-   * Handles email/password sign-in or registration.
-   */
+  // 🔀 Handle email/password sign-in or registration
   const handleSubmit = async () => {
     if (!email || !password) {
       setError('Email and password are required');
@@ -158,9 +141,7 @@ const SignIn = () => {
     }
   };
 
-  /**
-   * Handles password reset via email.
-   */
+  // 🔀 Handle password reset
   const handlePasswordReset = async () => {
     if (!email) {
       setError('Please enter your email to reset password');
@@ -261,7 +242,7 @@ const SignIn = () => {
               variant="body2"
               align="center"
               sx={{ mt: 2, cursor: 'pointer', color: '#90caf9' }}
-                            onClick={handlePasswordReset}
+              onClick={handlePasswordReset}
               aria-label="forgot-password"
             >
               Forgot your password?

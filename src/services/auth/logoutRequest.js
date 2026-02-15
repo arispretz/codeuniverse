@@ -4,8 +4,9 @@ import { auth } from '../../firebase/auth.js';
 /**
  * @fileoverview logoutRequest utility.
  * Handles signing out the current Firebase user.
- * - Invoca `signOut` de Firebase Auth.
- * - Muestra mensajes en consola para éxito o error.
+ * - Calls `signOut` from Firebase Auth.
+ * - Clears localStorage.
+ * - Resets the user and role context.
  *
  * @module services/auth/logoutRequest
  */
@@ -15,26 +16,17 @@ import { auth } from '../../firebase/auth.js';
  *
  * @async
  * @function logoutRequest
+ * @param {Function} setUser - Setter to clear the user in context.
+ * @param {Function} setRole - Setter to clear the role in context.
  * @returns {Promise<void>} Resolves when the user has been successfully signed out.
- *
- * @throws {Error} Throws an error if the sign-out process fails.
- *
- * @example
- * import { logoutRequest } from './utils/logoutRequest';
- *
- * const handleLogout = async () => {
- *   try {
- *     await logoutRequest();
- *     // Redirigir al usuario a la página de inicio
- *     navigate('/home');
- *   } catch (err) {
- *     console.error('Logout failed:', err);
- *   }
- * };
  */
-export const logoutRequest = async () => {
+export const logoutRequest = async (setUser, setRole) => {
   try {
     await signOut(auth);
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    setUser(null);
+    setRole(null);
     console.log('✅ User successfully logged out');
   } catch (error) {
     console.error('❌ Error while logging out:', error.message);

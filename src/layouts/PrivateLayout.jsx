@@ -40,19 +40,11 @@ import { Link, useNavigate, Outlet } from "react-router-dom";
 import ThemeToggleButton from "../ThemeToggleButton";
 import Logo from "../components/Logo.jsx";
 import { useTheme } from "@mui/material/styles";
-import { signOut } from "firebase/auth";
-import { auth } from "../firebase/auth.js";
 import { AuthContext } from "../context/AuthContext.jsx";
+import { logoutRequest } from "../services/auth/logoutRequest.js";
 
 const drawerWidth = 200;
 
-/**
- * Returns sidebar items based on user role.
- *
- * @function getSidebarItems
- * @param {string} role - User role (`admin`, `manager`, `developer`, `guest`).
- * @returns {Array<Object>} List of sidebar items with label, route, and icon.
- */
 const getSidebarItems = (role) => {
   const common = [
     { label: "Dashboard", to: "/dashboard", icon: <Dashboard /> },
@@ -101,23 +93,6 @@ const getSidebarItems = (role) => {
   }
 };
 
-/**
- * PrivateLayout Component
- *
- * @function PrivateLayout
- * @param {Object} props - Component props.
- * @param {React.ReactNode} props.children - Main content rendered inside the layout.
- * @param {Object} props.user - Authenticated user object.
- * @param {string} props.user.displayName - User's display name.
- * @param {string} props.user.photoURL - User's avatar URL.
- * @param {string} props.user.role - User's role (`admin`, `manager`, `developer`, `guest`).
- * @returns {JSX.Element} Complete layout with AppBar, sidebar navigation, and main content.
- *
- * @example
- * <PrivateLayout>
- *   <Dashboard />
- * </PrivateLayout>
- */
 export function PrivateLayout({ children }) {
   const { user, setUser, setRole } = useContext(AuthContext);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -133,19 +108,11 @@ export function PrivateLayout({ children }) {
   };
 
   /**
-   * Handles user logout.
-   *
-   * @async
-   * @function handleLogout
-   * @returns {Promise<void>}
+   * Handles user logout using centralized logoutRequest.
    */
   const handleLogout = async () => {
     try {
-      await signOut(auth);
-      localStorage.removeItem("token");
-      localStorage.removeItem("role");
-      setUser(null);
-      setRole(null);
+      await logoutRequest(setUser, setRole);
       navigate("/sign-in");
     } catch (err) {
       console.error("Logout error:", err);
@@ -166,7 +133,6 @@ export function PrivateLayout({ children }) {
 
   return (
     <Box sx={{ display: "flex", minHeight: "100vh", bgcolor: "background.default" }}>
-      {/* AppBar with logo, workspace title, user greeting, avatar, and theme toggle */}
       <AppBar
         position="fixed"
         sx={{
@@ -197,7 +163,6 @@ export function PrivateLayout({ children }) {
             <ThemeToggleButton />
           </Box>
 
-          {/* User Menu with profile/settings links and logout */}
           <Menu
             anchorEl={anchorEl}
             open={openMenu}
@@ -246,7 +211,6 @@ export function PrivateLayout({ children }) {
         </Toolbar>
       </AppBar>
 
-      {/* Sidebar Drawer with role-based navigation */}
       <Drawer
         variant="permanent"
         sx={{
@@ -259,7 +223,7 @@ export function PrivateLayout({ children }) {
         }}
       >
         <Toolbar />
-                <List sx={{ mt: 2 }}>
+        <List sx={{ mt: 2 }}>
           {sidebarItems.map(({ label, to, icon }, index) => (
             <ListItemButton key={index} component={Link} to={to}>
               <ListItemIcon>{icon}</ListItemIcon>
@@ -275,7 +239,6 @@ export function PrivateLayout({ children }) {
         </List>
       </Drawer>
 
-      {/* Main Content Area */}
       <Box
         component="main"
         sx={{
@@ -288,7 +251,6 @@ export function PrivateLayout({ children }) {
         <Toolbar />
         <Box sx={{ display: "flex", justifyContent: "space-evenly" }}>
           <Box sx={{ display: "flex", flexDirection: "column", width: "100%", overflowX: "hidden" }}>
-            {/* React Router Outlet renders child routes here */}
             <Outlet />
           </Box>
         </Box>
@@ -298,9 +260,7 @@ export function PrivateLayout({ children }) {
 }
 
 PrivateLayout.propTypes = {
-  /** Child components rendered inside the layout */
   children: PropTypes.node.isRequired,
-  /** Authenticated user object */
   user: PropTypes.shape({
     displayName: PropTypes.string,
     photoURL: PropTypes.string,

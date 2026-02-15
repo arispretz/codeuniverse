@@ -105,7 +105,7 @@ const CollaborativeCodeEditor = () => {
       </Box>
 
       {/* 📝 Main Panel */}
-      <Box sx={{ width: 800, flex: 1.5, px: 3, py: 3, display: 'flex', flexDirection: 'column' }}>
+      <Box sx={{ width: 700, flex: 1.5, px: 3, py: 3, display: 'flex', flexDirection: 'column' }}>
         <Typography variant="h5" fontWeight="bold" gutterBottom>
           🧑‍💻 Code together, anywhere.
         </Typography>

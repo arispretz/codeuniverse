@@ -21,21 +21,7 @@ import { Paper, Box, Typography, Divider, Chip } from "@mui/material";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getUserToken } from "../utils/userToken.js";
 
-/**
- * TerminalPanel Component
- *
- * @function TerminalPanel
- * @param {Object} props - Component props.
- * @param {string} [props.projectId="default"] - Project ID to connect the terminal to.
- * @param {string} [props.wsPath="/terminal-audit"] - WebSocket path for terminal connection.
- * @param {boolean} [props.active=false] - Whether the Console tab is currently active (used for resizing).
- * @returns {JSX.Element} Interactive terminal panel component.
- *
- * @example
- * <TerminalPanel projectId="project123" wsPath="/terminal-audit" active={true} />
- */
 const TerminalPanel = ({ projectId = "default", wsPath = "/terminal-audit", active = false }) => {
-  // Refs for terminal, fit addon, socket, and buffers
   const terminalRef = useRef(null);
   const termRef = useRef(null);
   const fitRef = useRef(null);
@@ -45,9 +31,6 @@ const TerminalPanel = ({ projectId = "default", wsPath = "/terminal-audit", acti
   const [status, setStatus] = useState("connecting");
 
   useEffect(() => {
-    /**
-     * Initializes the xterm terminal instance with theme and addons.
-     */
     const term = new Terminal({
       cursorBlink: true,
       fontSize: 14,
@@ -66,18 +49,13 @@ const TerminalPanel = ({ projectId = "default", wsPath = "/terminal-audit", acti
 
     if (terminalRef.current) {
       term.open(terminalRef.current);
-      // Ensure DOM is rendered before fitting dimensions
       requestAnimationFrame(() => fitAddon.fit());
       term.focus();
     }
 
-    /**
-     * Handles user input and sends data to WebSocket or buffers it.
-     */
     term.onData((data) => {
       const socket = socketRef.current;
       if (!socket || socket.readyState !== WebSocket.OPEN) {
-        // Buffer input if socket is not ready
         if (data !== "\r") {
           inputBufferRef.current += data;
           term.write(data);
@@ -88,7 +66,6 @@ const TerminalPanel = ({ projectId = "default", wsPath = "/terminal-audit", acti
         return;
       }
 
-      // Handle Enter, Backspace, and normal input
       if (data === "\r") {
         socket.send(inputBufferRef.current + "\n");
         inputBufferRef.current = "";
@@ -117,9 +94,6 @@ const TerminalPanel = ({ projectId = "default", wsPath = "/terminal-audit", acti
     };
   }, []);
 
-  /**
-   * Adjust terminal size when the Console tab becomes active.
-   */
   useEffect(() => {
     if (active && fitRef.current) {
       requestAnimationFrame(() => fitRef.current.fit());
@@ -129,9 +103,6 @@ const TerminalPanel = ({ projectId = "default", wsPath = "/terminal-audit", acti
   useEffect(() => {
     let unsubAuth = null;
 
-    /**
-     * Establishes WebSocket connection with backend, handles reconnection and authentication.
-     */
     const connect = async () => {
       if (socketRef.current) {
         try {
@@ -142,18 +113,15 @@ const TerminalPanel = ({ projectId = "default", wsPath = "/terminal-audit", acti
 
       setStatus("connecting");
 
-      // Detect protocol based on environment (local vs production)
       const protocol = window.location.protocol === "https:" ? "wss" : "ws";
-      const backendHost =
-        import.meta.env.VITE_BACKEND_WS_HOST || "localhost:4000"; // fallback for local dev
-
-      const url = `${protocol}://${backendHost}${wsPath}?project=${encodeURIComponent(
-        projectId
-      )}`;
+      const backendHost = import.meta.env.VITE_BACKEND_WS_HOST || "localhost:4000";
 
       const token = await getUserToken(true).catch(() => null);
-      const socket = new WebSocket(url, token ? [token] : []);
+      const url = `${protocol}://${backendHost}${wsPath}?project=${encodeURIComponent(
+        projectId
+      )}&token=${encodeURIComponent(token || "")}`;
 
+      const socket = new WebSocket(url);
       socketRef.current = socket;
 
       socket.onopen = () => {
@@ -177,7 +145,6 @@ const TerminalPanel = ({ projectId = "default", wsPath = "/terminal-audit", acti
       };
     };
 
-    // Reconnect on auth state change
     const auth = getAuth();
     unsubAuth = onAuthStateChanged(auth, async () => {
       if (reconnectTimerRef.current) clearTimeout(reconnectTimerRef.current);
@@ -185,7 +152,6 @@ const TerminalPanel = ({ projectId = "default", wsPath = "/terminal-audit", acti
       connect();
     });
 
-    // Keep-alive ping
     const interval = setInterval(() => {
       if (socketRef.current?.readyState === WebSocket.OPEN) {
         socketRef.current.send("__ping__");
@@ -200,7 +166,6 @@ const TerminalPanel = ({ projectId = "default", wsPath = "/terminal-audit", acti
 
   return (
     <Paper elevation={3} sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
-      {/* Header with status */}
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", p: 1 }}>
         <Typography variant="subtitle1">💻 Terminal</Typography>
         <Chip
@@ -210,7 +175,6 @@ const TerminalPanel = ({ projectId = "default", wsPath = "/terminal-audit", acti
         />
       </Box>
       <Divider />
-      {/* Terminal container */}
       <Box
         ref={terminalRef}
         sx={{ flex: 1, minHeight: "300px", bgcolor: "#1e1e1e", overflow: "hidden" }}

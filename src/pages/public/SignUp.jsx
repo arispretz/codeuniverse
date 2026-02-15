@@ -17,7 +17,6 @@ import {
   Alert,
 } from '@mui/material';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import axios from 'axios';
 
 import FormCard from '../../components/FormCard.jsx';
 import Input from '../../components/Input.jsx';
@@ -37,15 +36,8 @@ import {
   browserLocalPersistence,
 } from 'firebase/auth';
 import { getRedirectForRole } from '../../utils/getRedirectForRole.js';
+import { syncUserAndRedirect } from '../../utils/syncUserAndRedirect.js';
 
-/**
- * SignUp component.
- * Provides registration via email/password or social providers (Google, GitHub).
- * Handles authentication flow, user sync, and redirects.
- *
- * @function SignUp
- * @returns {JSX.Element} Sign-up page layout
- */
 const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -56,10 +48,11 @@ const SignUp = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const { isAuthenticated, role, loading: userLoading } = useUser();
+  const { isAuthenticated, role, loading: userLoading, setUser, setRole } = useUser();
 
   const fromPath = location.state?.from?.pathname;
 
+  // 🔀 Redirect authenticated users away from auth pages
   useEffect(() => {
     const authPages = ['/sign-in', '/register'];
     const currentPath = location.pathname;
@@ -70,57 +63,7 @@ const SignUp = () => {
     }
   }, [isAuthenticated, userLoading, role, navigate, fromPath, location.pathname]);
 
-  /**
-   * Handles authentication flow after Firebase login/registration.
-   * @param {object} firebaseUser - Firebase user object
-   * @param {string|null} customRedirectPath - Optional custom redirect path
-   */
-  const handleAuthFlow = async (firebaseUser, customRedirectPath = null) => {
-    try {
-      const token = await firebaseUser.getIdToken(true);
-      localStorage.setItem('token', token);
-
-      let userData;
-      try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_EXPRESS_URL}/api/users/me`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-            withCredentials: true,
-          }
-        );
-        userData = res.data;
-      } catch (err) {
-        if (err.response?.status === 404) {
-          const registerRes = await axios.post(
-            `${import.meta.env.VITE_EXPRESS_URL}/register`,
-            {
-              idToken: token,
-              username: firebaseUser.displayName || firebaseUser.email,
-              invitationCode: null,
-            },
-            {
-              headers: { Authorization: `Bearer ${token}` },
-              withCredentials: true,
-            }
-          );
-          userData = { role: registerRes.data.role };
-        } else {
-          setError('Authentication failed');
-          return;
-        }
-      }
-
-      const redirectPath =
-        customRedirectPath || fromPath || getRedirectForRole(userData.role);
-      navigate(redirectPath, { replace: true });
-    } catch {
-      setError('Authentication failed');
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // 🔀 Handle OAuth redirect results
   useEffect(() => {
     const checkRedirectResult = async () => {
       try {
@@ -128,7 +71,8 @@ const SignUp = () => {
         if (result?.user) {
           const storedPath = localStorage.getItem('redirectAfterLogin');
           localStorage.removeItem('redirectAfterLogin');
-          await handleAuthFlow(result.user, storedPath);
+          const fallbackPath = getRedirectForRole('guest');
+          await syncUserAndRedirect(result.user, navigate, setUser, setRole, fallbackPath, storedPath);
         } else {
           setLoading(false);
         }
@@ -139,12 +83,9 @@ const SignUp = () => {
     };
 
     checkRedirectResult();
-  }, []);
+  }, [navigate, setUser, setRole]);
 
-  /**
-   * Handles OAuth sign-up via Google or GitHub.
-   * @param {string} providerName - The provider to use ("google" or "github").
-   */
+  // 🔀 Handle OAuth sign-up
   const handleSocialRedirect = async (providerName) => {
     setError('');
     setIsSubmitting(true);
@@ -165,9 +106,7 @@ const SignUp = () => {
     }
   };
 
-  /**
-   * Handles email/password registration.
-   */
+  // 🔀 Handle email/password registration
   const handleSubmit = async () => {
     setIsSubmitting(true);
     setError('');
@@ -186,7 +125,8 @@ const SignUp = () => {
 
     try {
       const result = await createUserWithEmailAndPassword(auth, email, password);
-      await handleAuthFlow(result.user);
+      const fallbackPath = getRedirectForRole('guest');
+      await syncUserAndRedirect(result.user, navigate, setUser, setRole, fallbackPath, fromPath);
     } catch (err) {
       switch (err.code) {
         case 'auth/email-already-in-use':
@@ -204,14 +144,7 @@ const SignUp = () => {
 
   if (loading || userLoading) {
     return (
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '100vh',
-        }}
-      >
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
         <CircularProgress />
         <Typography variant="h6" sx={{ ml: 2 }}>
           Loading authentication...
@@ -221,15 +154,7 @@ const SignUp = () => {
   }
 
   return (
-    <Box
-      sx={{
-        bgcolor: 'background.default',
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
+    <Box sx={{ bgcolor: 'background.default', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <Container maxWidth="sm">
         <FormCard
           title="Create your account"
@@ -238,10 +163,7 @@ const SignUp = () => {
           footer={
             <Typography variant="body2" align="center">
               Already have an account?{' '}
-              <Link
-                to="/sign-in"
-                style={{ color: '#90caf9', textDecoration: 'none' }}
-              >
+              <Link to="/sign-in" style={{ color: '#90caf9', textDecoration: 'none' }}>
                 Sign In
               </Link>
             </Typography>
@@ -253,14 +175,8 @@ const SignUp = () => {
             </Alert>
           )}
 
-          <AuthProviderButton
-            provider="google"
-            onClick={() => handleSocialRedirect('google')}
-          />
-          <AuthProviderButton
-            provider="github"
-            onClick={() => handleSocialRedirect('github')}
-          />
+          <AuthProviderButton provider="google" onClick={() => handleSocialRedirect('google')} />
+          <AuthProviderButton provider="github" onClick={() => handleSocialRedirect('github')} />
 
           <Divider sx={{ my: 2 }}>or create with email</Divider>
 
