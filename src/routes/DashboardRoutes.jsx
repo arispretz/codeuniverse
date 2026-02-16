@@ -1,7 +1,14 @@
+/**
+ * @fileoverview Dashboard routes configuration for protected access.
+ * Provides lazy-loaded components and role-based route protection.
+ * @module routes/DashboardRoutes
+ */
+
 import React, { lazy } from 'react';
 import { ProtectedRoute } from './ProtectedRoute.jsx';
 import PrivateLayout from '../layouts/PrivateLayout.jsx';
 
+// Lazy-loaded route components
 const Dashboard = lazy(() => import('../pages/Dashboard'));
 const MyProjects = lazy(() => import('../pages/MyProjects'));
 const KanbanBoard = lazy(() => import('../pages/KanbanBoard'));
@@ -23,7 +30,7 @@ const QuickStartGuide = lazy(() => import("../pages/docs/QuickStartGuide"));
 export const DashboardRoutes = [
   {
     path: 'dashboard',
-    element: <PrivateLayout />, 
+    element: <PrivateLayout />,
     children: [
       { 
         index: true, 
@@ -163,11 +170,53 @@ export const DashboardRoutes = [
           </ProtectedRoute>
         ),
       },
+
+      // ✅ Project-specific routes (added back)
       {
         path: 'projects/:id',
         element: (
           <ProtectedRoute allowedRoles={['admin','manager','developer']}>
             <TasksPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'projects/:id/kanban',
+        element: (
+          <ProtectedRoute allowedRoles={['admin','manager','developer']}>
+            <KanbanBoard />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'projects/:id/local-tasks',
+        element: (
+          <ProtectedRoute allowedRoles={['admin','manager','developer']}>
+            <LocalTaskBoard />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'projects/:id/lists/:listId/tasks',
+        element: (
+          <ProtectedRoute allowedRoles={['admin','manager','developer']}>
+            <TasksPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'projects/:id/lists/:listId/local-tasks',
+        element: (
+          <ProtectedRoute allowedRoles={['admin','manager','developer']}>
+            <LocalTaskBoard />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'projects/:id/lists/:listId/kanban',
+        element: (
+          <ProtectedRoute allowedRoles={['admin','manager','developer']}>
+            <KanbanBoard />
           </ProtectedRoute>
         ),
       },
