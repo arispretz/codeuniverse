@@ -42,7 +42,7 @@
 Provides functions to interact with different backends for code-related tasks:
 - Linting code (Express backend)
 - Running code (Judge0 via RapidAPI)
-- Autocompleting code (FastAPI backend)
+- Autocompleting code (Express backend → FastAPI)
 
 All requests require authentication (Firebase ID token or RapidAPI key).</div>
         
@@ -93,7 +93,7 @@ All requests require authentication (Firebase ID token or RapidAPI key).</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_services_editorService.js.html">src/services/editorService.js</a>, <a href="src_services_editorService.js.html#line18">line 18</a>
+        <a href="src_services_editorService.js.html">src/services/editorService.js</a>, <a href="src_services_editorService.js.html#line14">line 14</a>
     </li></ul></dd>
     
 
@@ -150,7 +150,7 @@ All requests require authentication (Firebase ID token or RapidAPI key).</div>
     
 
     
-    <h4 class="name" id="~autocompleteService"><span class="type-signature">(async, inner) </span>autocompleteService<span class="signature">(code, language)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id=".autocompleteService"><span class="type-signature">(static) </span>autocompleteService<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -158,7 +158,7 @@ All requests require authentication (Firebase ID token or RapidAPI key).</div>
 
 
 <div class="description">
-    Autocomplete code using FastAPI backend.
+    Autocomplete code using Express backend (which proxies to FastAPI).
 </div>
 
 
@@ -167,78 +167,6 @@ All requests require authentication (Firebase ID token or RapidAPI key).</div>
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>code</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Source code to autocomplete.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>language</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Programming language of the code.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -274,7 +202,7 @@ All requests require authentication (Firebase ID token or RapidAPI key).</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_services_editorService.js.html">src/services/editorService.js</a>, <a href="src_services_editorService.js.html#line90">line 90</a>
+        <a href="src_services_editorService.js.html">src/services/editorService.js</a>, <a href="src_services_editorService.js.html#line65">line 65</a>
     </li></ul></dd>
     
 
@@ -297,67 +225,10 @@ All requests require authentication (Firebase ID token or RapidAPI key).</div>
 
 
 
-<h5>Throws:</h5>
-
-        
-
-<dl>
-    <dt>
-        <div class="param-desc">
-        If user is not authenticated or request fails.
-        </div>
-    </dt>
-    <dd></dd>
-    <dt>
-        <dl>
-            <dt>
-                Type
-            </dt>
-            <dd>
-                
-<span class="param-type">Error</span>
-
-
-            </dd>
-        </dl>
-    </dt>
-    <dd></dd>
-</dl>
-
-
-    
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Autocompletion results object returned by the backend.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;Object></span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
 
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>const suggestion = await autocompleteService("function add(a, b) {", "javascript");
-console.log(suggestion.completion);</code></pre>
 
 
 
@@ -367,7 +238,7 @@ console.log(suggestion.completion);</code></pre>
     
 
     
-    <h4 class="name" id="~lintCodeService"><span class="type-signature">(async, inner) </span>lintCodeService<span class="signature">(code, language)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id=".lintCodeService"><span class="type-signature">(static) </span>lintCodeService<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -386,78 +257,6 @@ console.log(suggestion.completion);</code></pre>
 
 
 
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>code</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Source code to lint.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>language</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Programming language of the code.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
 
 
 
@@ -491,7 +290,7 @@ console.log(suggestion.completion);</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_services_editorService.js.html">src/services/editorService.js</a>, <a href="src_services_editorService.js.html#line30">line 30</a>
+        <a href="src_services_editorService.js.html">src/services/editorService.js</a>, <a href="src_services_editorService.js.html#line29">line 29</a>
     </li></ul></dd>
     
 
@@ -514,67 +313,10 @@ console.log(suggestion.completion);</code></pre>
 
 
 
-<h5>Throws:</h5>
-
-        
-
-<dl>
-    <dt>
-        <div class="param-desc">
-        If user is not authenticated or request fails.
-        </div>
-    </dt>
-    <dd></dd>
-    <dt>
-        <dl>
-            <dt>
-                Type
-            </dt>
-            <dd>
-                
-<span class="param-type">Error</span>
-
-
-            </dd>
-        </dl>
-    </dt>
-    <dd></dd>
-</dl>
-
-
-    
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Linting results object returned by the backend.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;Object></span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
 
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>const lintResults = await lintCodeService("const x=1;", "javascript");
-console.log(lintResults.errors);</code></pre>
 
 
 
@@ -584,7 +326,7 @@ console.log(lintResults.errors);</code></pre>
     
 
     
-    <h4 class="name" id="~runCodeService"><span class="type-signature">(async, inner) </span>runCodeService<span class="signature">(code, languageId)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id=".runCodeService"><span class="type-signature">(static) </span>runCodeService<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -603,78 +345,6 @@ console.log(lintResults.errors);</code></pre>
 
 
 
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>code</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Source code to execute.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>languageId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Judge0 language ID (e.g., 52 for Python, 62 for Java).</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
 
 
 
@@ -708,7 +378,7 @@ console.log(lintResults.errors);</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_services_editorService.js.html">src/services/editorService.js</a>, <a href="src_services_editorService.js.html#line57">line 57</a>
+        <a href="src_services_editorService.js.html">src/services/editorService.js</a>, <a href="src_services_editorService.js.html#line44">line 44</a>
     </li></ul></dd>
     
 
@@ -731,67 +401,10 @@ console.log(lintResults.errors);</code></pre>
 
 
 
-<h5>Throws:</h5>
-
-        
-
-<dl>
-    <dt>
-        <div class="param-desc">
-        If RapidAPI key is missing or request fails.
-        </div>
-    </dt>
-    <dd></dd>
-    <dt>
-        <dl>
-            <dt>
-                Type
-            </dt>
-            <dd>
-                
-<span class="param-type">Error</span>
-
-
-            </dd>
-        </dl>
-    </dt>
-    <dd></dd>
-</dl>
-
-
-    
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Execution results including stdout, stderr, and status.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;Object></span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
 
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>const result = await runCodeService("print('Hello')", 52);
-console.log(result.stdout); // "Hello"</code></pre>
 
 
 
@@ -817,7 +430,7 @@ console.log(result.stdout); // "Hello"</code></pre>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Mon Feb 16 2026 21:39:00 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Mon Feb 16 2026 22:19:52 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
