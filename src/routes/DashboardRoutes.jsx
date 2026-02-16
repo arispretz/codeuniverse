@@ -1,3 +1,5 @@
+
+
 import React, { lazy } from 'react';
 import { ProtectedRoute } from './ProtectedRoute.jsx';
 import PrivateLayout from '../layouts/PrivateLayout.jsx';
@@ -24,7 +26,6 @@ export const DashboardRoutes = [
   {
     path: 'dashboard',
     element: (
-      // ✅ Solo verifica autenticación, no roles
       <ProtectedRoute>
         <PrivateLayout />
       </ProtectedRoute>

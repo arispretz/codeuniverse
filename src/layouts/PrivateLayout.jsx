@@ -47,36 +47,34 @@ const drawerWidth = 200;
 
 /**
  * Sidebar items with explicit allowed roles.
- * Each item includes a `roles` array to specify which roles can see it.
  */
 const getSidebarItems = (role) => {
   const items = [
-    { label: "Dashboard", to: "/dashboard", icon: <Dashboard />, roles: ["admin","manager","developer","guest"] },
-    { label: "Kanban Board", to: "/dashboard/kanban", icon: <Assignment />, roles: ["admin","manager","developer"] },
-    { label: "Local Task Board", to: "/dashboard/local-task-board", icon: <Assignment />, roles: ["admin","manager","developer"] },
-    { label: "Personal Tasks", to: "/dashboard/personal-tasks", icon: <Assignment />, roles: ["admin","developer"] },
-    { label: "Collaborative Code Editor", to: "/dashboard/editor", icon: <Assignment />, roles: ["admin","developer"] },
-    { label: "Team Chat", to: "/dashboard/team-chat", icon: <People />, roles: ["admin","manager","developer"] },
-    { label: "Code Review Panel", to: "/dashboard/code-review", icon: <Code />, roles: ["admin","developer"] },
-    { label: "Project Documentation", to: "/dashboard/project-docs", icon: <Code />, roles: ["admin","manager","developer"] },
+    { label: "Dashboard", to: "", icon: <Dashboard />, roles: ["admin","manager","developer","guest"] },
+    { label: "Kanban Board", to: "kanban", icon: <Assignment />, roles: ["admin","manager","developer"] },
+    { label: "Local Task Board", to: "local-task-board", icon: <Assignment />, roles: ["admin","manager","developer"] },
+    { label: "Personal Tasks", to: "personal-tasks", icon: <Assignment />, roles: ["admin","developer"] },
+    { label: "Collaborative Code Editor", to: "editor", icon: <Assignment />, roles: ["admin","developer"] },
+    { label: "Team Chat", to: "team-chat", icon: <People />, roles: ["admin","manager","developer"] },
+    { label: "Code Review Panel", to: "code-review", icon: <Code />, roles: ["admin","developer"] },
+    { label: "Project Documentation", to: "project-docs", icon: <Code />, roles: ["admin","manager","developer"] },
 
     // Admin-only routes
-    { label: "Project Dashboard", to: "/dashboard/project-dashboard", icon: <BarChart />, roles: ["admin"] },
-    { label: "Project Management Dashboard", to: "/dashboard/manager/projects", icon: <Code />, roles: ["admin"] },
-    { label: "Admin User Panel", to: "/dashboard/admin-user-panel", icon: <BarChart />, roles: ["admin"] },
+    { label: "Project Dashboard", to: "project-dashboard", icon: <BarChart />, roles: ["admin"] },
+    { label: "Project Management Dashboard", to: "manager/projects", icon: <Code />, roles: ["admin"] },
+    { label: "Admin User Panel", to: "admin-user-panel", icon: <BarChart />, roles: ["admin"] },
 
     // Manager-only routes
-    { label: "Project Dashboard", to: "/dashboard/project-dashboard", icon: <BarChart />, roles: ["manager"] },
-    { label: "Project Management Dashboard", to: "/dashboard/manager/projects", icon: <Code />, roles: ["manager"] },
+    { label: "Project Dashboard", to: "project-dashboard", icon: <BarChart />, roles: ["manager"] },
+    { label: "Project Management Dashboard", to: "manager/projects", icon: <Code />, roles: ["manager"] },
 
     // Developer-only routes
-    { label: "My Projects", to: "/dashboard/my-projects", icon: <Assignment />, roles: ["developer"] },
+    { label: "My Projects", to: "my-projects", icon: <Assignment />, roles: ["developer"] },
 
     // Guest-only routes
-    { label: "Quick Start Guide", to: "/dashboard/quick-start-guide", icon: <HelpOutline />, roles: ["guest"] },
+    { label: "Quick Start Guide", to: "quick-start-guide", icon: <HelpOutline />, roles: ["guest"] },
   ];
 
-  // Filter items based on the current role
   return items.filter(item => item.roles.includes(role));
 };
 
@@ -165,7 +163,7 @@ export function PrivateLayout({ children }) {
               <MenuItem
                 key={index}
                 component={Link}
-                to={to}
+                to={to} 
                 onClick={handleMenuClose}
                 autoFocus={false}
               >
@@ -177,7 +175,7 @@ export function PrivateLayout({ children }) {
             <MenuItem
               onClick={() => {
                 handleMenuClose();
-                navigate("/modal/logout");
+                navigate("/modal/logout"); 
               }}
               sx={{ color: "error.main" }}
               autoFocus={false}
@@ -188,10 +186,11 @@ export function PrivateLayout({ children }) {
               Logout
             </MenuItem>
           </Menu>
+
         </Toolbar>
       </AppBar>
 
-      {/* Sidebar Drawer with role-based navigation */}
+      {/* Sidebar Drawer with navigation based on role */}
       <Drawer
         variant="permanent"
         sx={{
@@ -206,7 +205,11 @@ export function PrivateLayout({ children }) {
         <Toolbar />
         <List sx={{ mt: 2 }}>
           {sidebarItems.map(({ label, to, icon }, index) => (
-            <ListItemButton key={index} component={Link} to={to}>
+            <ListItemButton
+              key={index}
+              component={Link}
+              to={to} 
+            >
               <ListItemIcon>{icon}</ListItemIcon>
               <ListItemText
                 primary={label}
