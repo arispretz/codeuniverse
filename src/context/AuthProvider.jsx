@@ -72,8 +72,7 @@ export function AuthProvider({ children }) {
         setRole(null);
         setUserMongoId(null);
         localStorage.removeItem("token");
-        setIsAuthenticated(false);
-        navigate("/"); 
+        setIsAuthenticated(false); 
       }
       setLoading(false);
     });
