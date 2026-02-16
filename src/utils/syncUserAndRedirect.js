@@ -6,7 +6,12 @@ if (!BASE_URL) {
 }
 
 /**
- * Synchronizes Firebase user with backend, registers if needed, and redirects based on role.
+ * Synchronizes the Firebase user with the backend, registers if needed,
+ * updates context, and handles redirection logic.
+ *
+ * Key improvements:
+ * - Prevents forced redirection back to `/dashboard` when already inside a dashboard subroute.
+ * - Uses `fromPath` to return the user to the route they originally attempted to access.
  */
 export async function syncUserAndRedirect(
   firebaseUser,
@@ -17,20 +22,20 @@ export async function syncUserAndRedirect(
   fromPath
 ) {
   try {
-    // 🔑 Get Firebase ID token and store in localStorage
+    // 🔑 Get Firebase ID token and store it locally
     const token = await firebaseUser.getIdToken();
     localStorage.setItem("token", token);
 
     let userData;
     try {
-      // 📡 Try to fetch user from backend
+      // 📡 Attempt to fetch user from backend
       const res = await axios.get(`${BASE_URL}/api/users/me`, {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       });
       userData = res.data;
     } catch (err) {
-      // 🆕 Register user if not found
+      // 🆕 Register user if not found (404)
       if (err.response?.status === 404) {
         const registerRes = await axios.post(
           `${BASE_URL}/register`,
@@ -59,11 +64,20 @@ export async function syncUserAndRedirect(
     setUser({ ...firebaseUser, role: userData.role });
     setRole(userData.role);
 
-    // 🔀 Handle redirection logic
+    // 🔀 Redirection logic
     const currentPath = window.location.pathname;
     const isAuthPage = ["/sign-in", "/register"].includes(currentPath);
+    const isDashboardSubroute = currentPath.startsWith("/dashboard");
 
-    const redirectTarget = fromPath || (!isAuthPage ? fallbackPath : null);
+    /**
+     * Redirect rules:
+     * - If `fromPath` exists, go back to that route (user tried to access a protected page).
+     * - If not on an auth page AND not already inside a dashboard subroute,
+     *   redirect to the fallback (usually `/dashboard`).
+     * - Otherwise, stay where you are.
+     */
+    const redirectTarget =
+      fromPath || (!isAuthPage && !isDashboardSubroute ? fallbackPath : null);
 
     if (redirectTarget) {
       navigate(redirectTarget, { replace: true });

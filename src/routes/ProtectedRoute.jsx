@@ -4,23 +4,8 @@ import { useUser } from '../hooks/useUser.jsx';
 import { CircularProgress, Box } from '@mui/material';
 
 /**
- * @fileoverview ProtectedRoute component.
- * Restricts access to child components based on user authentication and role.
- * - Shows a full-screen spinner while authentication state is loading.
- * - Redirects unauthenticated users to `/sign-in`.
- * - Redirects authenticated users without the required role to `/unauthorized`.
- *
- * @module routes/ProtectedRoute
- */
-
-/**
  * FullScreenSpinner Component
- *
- * @function FullScreenSpinner
- * @returns {JSX.Element} A centered loading spinner covering the entire viewport.
- *
- * @example
- * <FullScreenSpinner />
+ * Displays a centered loading spinner covering the entire viewport.
  */
 export const FullScreenSpinner = () => (
   <Box
@@ -37,35 +22,27 @@ export const FullScreenSpinner = () => (
 
 /**
  * ProtectedRoute Component
- *
- * @function ProtectedRoute
- * @param {Object} props - Component props.
- * @param {React.ReactNode} props.children - Components to render if access is granted.
- * @param {string[]} [props.allowedRoles=[]] - List of allowed roles (case-insensitive).
- * @returns {JSX.Element} Either the protected content, a loading spinner, or a redirect.
- *
- * @example
- * import { ProtectedRoute } from './routes/ProtectedRoute';
- *
- * <Route
- *   path="/dashboard"
- *   element={
- *     <ProtectedRoute allowedRoles={['admin', 'manager']}>
- *       <Dashboard />
- *     </ProtectedRoute>
- *   }
- * />
+ * Restricts access to child components based on authentication and role.
+ * - Shows spinner while authentication state is loading.
+ * - Redirects unauthenticated users to `/sign-in`, preserving the original path in `state.from`.
+ * - Redirects authenticated users without the required role to `/unauthorized`.
  */
 export const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   const { user, role, loading, isAuthenticated } = useUser();
   const location = useLocation();
 
-  // ⏳ Show spinner while authentication state is loading or role is not yet available
+  // ⏳ Show spinner while authentication state is loading or role not yet available
   if (loading || !role) return <FullScreenSpinner />;
 
-  // 🚫 Redirect unauthenticated users to sign-in
+  // 🚫 Redirect unauthenticated users to sign-in, preserving attempted path
   if (!isAuthenticated) {
-    return <Navigate to="/sign-in" state={{ from: location }} replace />;
+    return (
+      <Navigate
+        to="/sign-in"
+        state={{ from: location.pathname }} // ✅ pass attempted path
+        replace
+      />
+    );
   }
 
   // Normalize role for case-insensitive comparison

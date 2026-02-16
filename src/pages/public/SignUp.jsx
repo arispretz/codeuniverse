@@ -50,7 +50,8 @@ const SignUp = () => {
   const location = useLocation();
   const { isAuthenticated, role, loading: userLoading, setUser, setRole } = useUser();
 
-  const fromPath = location.state?.from?.pathname;
+  // ✅ Correct: read `state.from` directly
+  const fromPath = location.state?.from;
 
   // 🔀 Redirect authenticated users away from auth pages
   useEffect(() => {
@@ -72,7 +73,14 @@ const SignUp = () => {
           const storedPath = localStorage.getItem('redirectAfterLogin');
           localStorage.removeItem('redirectAfterLogin');
           const fallbackPath = getRedirectForRole('guest');
-          await syncUserAndRedirect(result.user, navigate, setUser, setRole, fallbackPath, storedPath);
+          await syncUserAndRedirect(
+            result.user,
+            navigate,
+            setUser,
+            setRole,
+            fallbackPath,
+            storedPath // ✅ use storedPath if available
+          );
         }
       } catch (err) {
         setError(`Provider registration error: ${err.message}`);
@@ -120,8 +128,7 @@ const SignUp = () => {
       setError('Passwords do not match');
       setIsSubmitting(false);
       return;
-    }
-
+    }   
     try {
       const result = await createUserWithEmailAndPassword(auth, email, password);
       const fallbackPath = getRedirectForRole('guest');
@@ -219,3 +226,4 @@ const SignUp = () => {
 };
 
 export default SignUp;
+

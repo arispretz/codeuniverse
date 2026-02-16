@@ -37,12 +37,13 @@ const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
-  const fromPath = location.state?.from?.pathname;
+
+  // ✅ Correct: read `state.from` directly, not `.pathname`
+  const fromPath = location.state?.from;  
   const isRegister = location.pathname.includes('register');
 
   const { isAuthenticated, role, loading: userLoading, setUser, setRole } = useUser();
@@ -70,7 +71,14 @@ const SignIn = () => {
           const storedPath = localStorage.getItem('redirectAfterLogin');
           localStorage.removeItem('redirectAfterLogin');
           const fallbackPath = getRedirectForRole('guest');
-          await syncUserAndRedirect(result.user, navigate, setUser, setRole, fallbackPath, storedPath);
+          await syncUserAndRedirect(
+            result.user,
+            navigate,
+            setUser,
+            setRole,
+            fallbackPath,
+            storedPath // ✅ use storedPath if available
+          );
         }
       } catch (err) {
         setError(`Sign-in error: ${err.message}`);
@@ -160,7 +168,7 @@ const SignIn = () => {
     }
   };
 
-  if (loading || userLoading) {
+  if (userLoading) {
     return (
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
         <CircularProgress />
@@ -207,8 +215,6 @@ const SignIn = () => {
             label="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            error={!!error && !email}
-            helperText={!email && error ? 'Email is required' : ''}
             aria-label="email"
           />
           <Input
@@ -216,8 +222,6 @@ const SignIn = () => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            error={!!error && !password}
-            helperText={!password && error ? 'Password is required' : ''}
             aria-label="password"
           />
 
