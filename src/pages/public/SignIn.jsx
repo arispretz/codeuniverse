@@ -53,7 +53,7 @@ const SignIn = () => {
     const authPages = ['/sign-in', '/register'];
     const currentPath = location.pathname;
 
-    if (isAuthenticated && !userLoading && authPages.includes(currentPath)) {
+    if (!userLoading && isAuthenticated && authPages.includes(currentPath)) {
       const fallbackPath = getRedirectForRole(role);
       navigate(fromPath || fallbackPath);
     }

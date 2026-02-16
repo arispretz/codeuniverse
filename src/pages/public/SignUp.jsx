@@ -43,7 +43,7 @@ const SignUp = () => {
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const navigate = useNavigate();
@@ -57,7 +57,7 @@ const SignUp = () => {
     const authPages = ['/sign-in', '/register'];
     const currentPath = location.pathname;
 
-    if (isAuthenticated && !userLoading && authPages.includes(currentPath)) {
+    if (!userLoading && isAuthenticated && authPages.includes(currentPath)) {
       const fallbackPath = getRedirectForRole(role);
       navigate(fromPath || fallbackPath);
     }
@@ -73,12 +73,11 @@ const SignUp = () => {
           localStorage.removeItem('redirectAfterLogin');
           const fallbackPath = getRedirectForRole('guest');
           await syncUserAndRedirect(result.user, navigate, setUser, setRole, fallbackPath, storedPath);
-        } else {
-          setLoading(false);
         }
       } catch (err) {
         setError(`Provider registration error: ${err.message}`);
-        setLoading(false);
+      } finally {
+        setLoading(false); 
       }
     };
 

@@ -38,9 +38,13 @@ import { createContext } from 'react';
  *   );
  * };
  */
+
+/**
+ * Authentication context instance.
+ */
 export const AuthContext = createContext({
   user: null,
-  isAuthenticated: false,
+  isAuthenticated: false,  
   loading: true,
   setUser: () => {},
   role: null,

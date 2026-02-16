@@ -41,6 +41,10 @@ import { AuthContext } from '../context/AuthContext.jsx';
  *   );
  * };
  */
+
+/**
+ * Custom hook to access user data from AuthContext.
+ */
 export function useUser() {
   const context = useContext(AuthContext);
 
@@ -56,6 +60,8 @@ export function useUser() {
     loading,
     setUser,
     setRole,
-    isAuthenticated: !!isAuthenticated,
+    isAuthenticated,
   };
 }
+
+

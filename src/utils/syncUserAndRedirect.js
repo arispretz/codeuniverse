@@ -62,7 +62,8 @@ export async function syncUserAndRedirect(
     // 🔀 Handle redirection logic
     const currentPath = window.location.pathname;
     const isAuthPage = ["/sign-in", "/register"].includes(currentPath);
-    const redirectTarget = fromPath || (isAuthPage ? fallbackPath : null);
+
+    const redirectTarget = fromPath || (!isAuthPage ? fallbackPath : null);
 
     if (redirectTarget) {
       navigate(redirectTarget, { replace: true });
