@@ -3,18 +3,9 @@ import { AuthContext } from "../context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 import { logoutRequest } from "../services/auth/logoutRequest.js";
 
-/**
- * @fileoverview ModalRoutes configuration.
- * Defines modal routes for rendering modal components based on path.
- * Components are lazy-loaded to optimize performance.
- *
- * @module routes/ModalRoutes
- */
-
-// Lazy-loaded modal components for performance optimization
 const LogoutModal = lazy(() => import("../components/modals/LogoutModal"));
 
-const LogoutModalWrapper = () => {
+export const LogoutModalWrapper = () => {
   const { setUser, setRole } = useContext(AuthContext);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -23,7 +14,7 @@ const LogoutModalWrapper = () => {
     try {
       setLoading(true);
       await logoutRequest(setUser, setRole);
-      navigate("/sign-in");
+      navigate("/sign-in");   
     } catch (err) {
       console.error("Logout error:", err);
     } finally {
@@ -32,7 +23,7 @@ const LogoutModalWrapper = () => {
   };
 
   const handleCancel = () => {
-    navigate(-1); // go back if cancel
+    navigate("/dashboard");   
   };
 
   return (
@@ -49,7 +40,7 @@ const LogoutModalWrapper = () => {
 
 export const ModalRoutes = [
   {
-    path: "logout",
+    path: "dashboard/logout",   
     element: <LogoutModalWrapper />,
   },
 ];

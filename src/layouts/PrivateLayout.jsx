@@ -148,8 +148,7 @@ export function PrivateLayout({ children }) {
               <Avatar src={user?.photoURL || ""} alt={user?.displayName || "Guest"} />
             </IconButton>
             <ThemeToggleButton />
-          </Box>
-
+          </Box>  
           {/* User dropdown menu */}
           <Menu
             anchorEl={anchorEl}
@@ -175,7 +174,7 @@ export function PrivateLayout({ children }) {
             <MenuItem
               onClick={() => {
                 handleMenuClose();
-                navigate("/modal/logout"); 
+                navigate("/dashboard/logout"); 
               }}
               sx={{ color: "error.main" }}
               autoFocus={false}

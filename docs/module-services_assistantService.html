@@ -39,11 +39,10 @@
     
         
             <div class="description">Assistant API client.
-Provides functions to interact with the FastAPI backend for assistant-related operations:
+Provides functions to interact with the Express backend for assistant-related operations:
 - Request replies (mentor mode, code-only mode)
-- Refactor code
-- Classify text
-- Retrieve metrics
+- Generate code
+- Autocomplete code
 
 All requests require a valid Firebase ID token for authentication.</div>
         
@@ -151,7 +150,7 @@ All requests require a valid Firebase ID token for authentication.</div>
     
 
     
-    <h4 class="name" id="~classifyText"><span class="type-signature">(async, inner) </span>classifyText<span class="signature">(text)</span><span class="type-signature"> &rarr; {Promise.&lt;string>}</span></h4>
+    <h4 class="name" id=".generateCodeSnippet"><span class="type-signature">(static) </span>generateCodeSnippet<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -159,7 +158,7 @@ All requests require a valid Firebase ID token for authentication.</div>
 
 
 <div class="description">
-    Perform basic text classification.
+    Generate code snippet.
 </div>
 
 
@@ -168,55 +167,6 @@ All requests require a valid Firebase ID token for authentication.</div>
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>text</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Text to classify.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -252,7 +202,7 @@ All requests require a valid Firebase ID token for authentication.</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_services_assistantService.js.html">src/services/assistantService.js</a>, <a href="src_services_assistantService.js.html#line92">line 92</a>
+        <a href="src_services_assistantService.js.html">src/services/assistantService.js</a>, <a href="src_services_assistantService.js.html#line52">line 52</a>
     </li></ul></dd>
     
 
@@ -277,36 +227,8 @@ All requests require a valid Firebase ID token for authentication.</div>
 
 
 
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Classification result.
-</div>
 
 
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;string></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>const category = await classifyText("This is a positive review");
-console.log(category); // "positive"</code></pre>
 
 
 
@@ -316,7 +238,7 @@ console.log(category); // "positive"</code></pre>
     
 
     
-    <h4 class="name" id="~getAssistantCodeReply"><span class="type-signature">(async, inner) </span>getAssistantCodeReply<span class="signature">(payload)</span><span class="type-signature"> &rarr; {Promise.&lt;string>}</span></h4>
+    <h4 class="name" id=".getAssistantCodeReply"><span class="type-signature">(static) </span>getAssistantCodeReply<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -335,55 +257,6 @@ console.log(category); // "positive"</code></pre>
 
 
 
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>payload</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Request payload containing user input.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
 
 
 
@@ -417,7 +290,7 @@ console.log(category); // "positive"</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_services_assistantService.js.html">src/services/assistantService.js</a>, <a href="src_services_assistantService.js.html#line47">line 47</a>
+        <a href="src_services_assistantService.js.html">src/services/assistantService.js</a>, <a href="src_services_assistantService.js.html#line38">line 38</a>
     </li></ul></dd>
     
 
@@ -442,36 +315,8 @@ console.log(category); // "positive"</code></pre>
 
 
 
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Assistant reply containing only code.
-</div>
 
 
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;string></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>const code = await getAssistantCodeReply({ prompt: "Write a bubble sort in Python" });
-console.log(code);</code></pre>
 
 
 
@@ -481,7 +326,7 @@ console.log(code);</code></pre>
     
 
     
-    <h4 class="name" id="~getAssistantReply"><span class="type-signature">(async, inner) </span>getAssistantReply<span class="signature">(payload)</span><span class="type-signature"> &rarr; {Promise.&lt;string>}</span></h4>
+    <h4 class="name" id=".getAssistantReply"><span class="type-signature">(static) </span>getAssistantReply<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -500,55 +345,6 @@ console.log(code);</code></pre>
 
 
 
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>payload</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Request payload containing user input.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
 
 
 
@@ -582,7 +378,7 @@ console.log(code);</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_services_assistantService.js.html">src/services/assistantService.js</a>, <a href="src_services_assistantService.js.html#line22">line 22</a>
+        <a href="src_services_assistantService.js.html">src/services/assistantService.js</a>, <a href="src_services_assistantService.js.html#line24">line 24</a>
     </li></ul></dd>
     
 
@@ -605,67 +401,10 @@ console.log(code);</code></pre>
 
 
 
-<h5>Throws:</h5>
-
-        
-
-<dl>
-    <dt>
-        <div class="param-desc">
-        Throws if no authenticated user or request fails.
-        </div>
-    </dt>
-    <dd></dd>
-    <dt>
-        <dl>
-            <dt>
-                Type
-            </dt>
-            <dd>
-                
-<span class="param-type">Error</span>
-
-
-            </dd>
-        </dl>
-    </dt>
-    <dd></dd>
-</dl>
-
-
-    
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Assistant reply as plain text.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;string></span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
 
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>const reply = await getAssistantReply({ prompt: "Explain recursion" });
-console.log(reply);</code></pre>
 
 
 
@@ -675,7 +414,7 @@ console.log(reply);</code></pre>
     
 
     
-    <h4 class="name" id="~getMetrics"><span class="type-signature">(async, inner) </span>getMetrics<span class="signature">(limit<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Array>}</span></h4>
+    <h4 class="name" id=".getAutocompleteSuggestion"><span class="type-signature">(static) </span>getAutocompleteSuggestion<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -683,7 +422,7 @@ console.log(reply);</code></pre>
 
 
 <div class="description">
-    Retrieve assistant metrics.
+    Get autocomplete suggestion.
 </div>
 
 
@@ -692,75 +431,6 @@ console.log(reply);</code></pre>
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>limit</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    10
-                
-                </td>
-            
-
-            <td class="description last">Number of metrics to retrieve.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -796,7 +466,7 @@ console.log(reply);</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_services_assistantService.js.html">src/services/assistantService.js</a>, <a href="src_services_assistantService.js.html#line118">line 118</a>
+        <a href="src_services_assistantService.js.html">src/services/assistantService.js</a>, <a href="src_services_assistantService.js.html#line65">line 65</a>
     </li></ul></dd>
     
 
@@ -821,201 +491,8 @@ console.log(reply);</code></pre>
 
 
 
-<h5>Returns:</h5>
 
-        
-<div class="param-desc">
-    List of user interactions.
-</div>
 
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;Array></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>const metrics = await getMetrics(5);
-console.log(metrics);</code></pre>
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="~refactorCode"><span class="type-signature">(async, inner) </span>refactorCode<span class="signature">(payload)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Refactor code.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>payload</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Request payload containing code to refactor.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_services_assistantService.js.html">src/services/assistantService.js</a>, <a href="src_services_assistantService.js.html#line70">line 70</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Refactored code response.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;Object></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>const result = await refactorCode({ code: "function add(a,b){return a+b}" });
-console.log(result.refactored);</code></pre>
 
 
 
@@ -1035,13 +512,13 @@ console.log(result.refactored);</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="babel.module_config.html">babel.config</a></li><li><a href="eslint.module_config.html">eslint.config</a></li><li><a href="jest.module_config.html">jest.config</a></li><li><a href="jest.module_setup.html">jest.setup</a></li><li><a href="module-ColorModeContext.html">ColorModeContext</a></li><li><a href="module-ThemeWrapper.html">ThemeWrapper</a></li><li><a href="module-auth_roles.html">auth/roles</a></li><li><a href="module-auth_useFirebaseAuth.html">auth/useFirebaseAuth</a></li><li><a href="module-components_AssistantSidebar.html">components/AssistantSidebar</a></li><li><a href="module-components_AuthProviderButton.html">components/AuthProviderButton</a></li><li><a href="module-components_Column.html">components/Column</a></li><li><a href="module-components_ColumnDroppable.html">components/ColumnDroppable</a></li><li><a href="module-components_EditorPanel.html">components/EditorPanel</a></li><li><a href="module-components_ErrorBoundaryWrapper.html">components/ErrorBoundaryWrapper</a></li><li><a href="module-components_FileTree.html">components/FileTree</a></li><li><a href="module-components_Footer.html">components/Footer</a></li><li><a href="module-components_FormCard.html">components/FormCard</a></li><li><a href="module-components_Input.html">components/Input</a></li><li><a href="module-components_KanbanModals.html">components/KanbanModals</a></li><li><a href="module-components_KanbanOverlay.html">components/KanbanOverlay</a></li><li><a href="module-components_KanbanTaskPreview.html">components/KanbanTaskPreview</a></li><li><a href="module-components_KanbanUtils.html">components/KanbanUtils</a></li><li><a href="module-components_Loading.html">components/Loading</a></li><li><a href="module-components_LocalTaskPanel.html">components/LocalTaskPanel</a></li><li><a href="module-components_Logo.html">components/Logo</a></li><li><a href="module-components_OutputPanel.html">components/OutputPanel</a></li><li><a href="module-components_PersonalTaskPreview.html">components/PersonalTaskPreview</a></li><li><a href="module-components_PersonalTasksPanel.html">components/PersonalTasksPanel</a></li><li><a href="module-components_ProjectSelector.html">components/ProjectSelector</a></li><li><a href="module-components_ProjectSummaryDashboard.html">components/ProjectSummaryDashboard</a></li><li><a href="module-components_RedirectHandler.html">components/RedirectHandler</a></li><li><a href="module-components_SortableTask.html">components/SortableTask</a></li><li><a href="module-components_SuspenseWrapper.html">components/SuspenseWrapper</a></li><li><a href="module-components_TaskCard.html">components/TaskCard</a></li><li><a href="module-components_TaskComments.html">components/TaskComments</a></li><li><a href="module-components_TaskFilters.html">components/TaskFilters</a></li><li><a href="module-components_TerminalPanel.html">components/TerminalPanel</a></li><li><a href="module-components_UserProfilePanel.html">components/UserProfilePanel</a></li><li><a href="module-components_modals_AddKanbanTaskModal.html">components/modals/AddKanbanTaskModal</a></li><li><a href="module-components_modals_AddTaskModal.html">components/modals/AddTaskModal</a></li><li><a href="module-components_modals_DeleteTaskModal.html">components/modals/DeleteTaskModal</a></li><li><a href="module-components_modals_EditLocalTaskModal.html">components/modals/EditLocalTaskModal</a></li><li><a href="module-components_modals_EditTaskModal.html">components/modals/EditTaskModal</a></li><li><a href="module-components_modals_LogoutModal.html">components/modals/LogoutModal</a></li><li><a href="module-components_modals_NewKanbanListModal.html">components/modals/NewKanbanListModal</a></li><li><a href="module-components_modals_NewListModal.html">components/modals/NewListModal</a></li><li><a href="module-components_modals_NewProjectModal.html">components/modals/NewProjectModal</a></li><li><a href="module-components_modals_ProjectDetailModal.html">components/modals/ProjectDetailModal</a></li><li><a href="module-components_modals_TaskDetailModal.html">components/modals/TaskDetailModal</a></li><li><a href="module-components_navbar_NavCategory.html">components/navbar/NavCategory</a></li><li><a href="module-components_navbar_Navbar.html">components/navbar/Navbar</a></li><li><a href="module-components_navbar_navDropdowns.html">components/navbar/navDropdowns</a></li><li><a href="module-context_AuthContext.html">context/AuthContext</a></li><li><a href="module-context_AuthProvider.html">context/AuthProvider</a></li><li><a href="module-context_ModalContext.html">context/ModalContext</a></li><li><a href="module-context_ModalProvider.html">context/ModalProvider</a></li><li><a href="module-firebase_auth.html">firebase/auth</a></li><li><a href="module-firebase_authUtils.html">firebase/authUtils</a></li><li><a href="module-hooks_init.html">hooks/init</a></li><li><a href="module-hooks_useAuth.html">hooks/useAuth</a></li><li><a href="module-hooks_useModal.html">hooks/useModal</a></li><li><a href="module-hooks_useUser.html">hooks/useUser</a></li><li><a href="module-hooks_utilsAuth.html">hooks/utilsAuth</a></li><li><a href="module-layouts_PrivateLayout.html">layouts/PrivateLayout</a></li><li><a href="module-layouts_PublicLayout.html">layouts/PublicLayout</a></li><li><a href="module-layouts_RootLayout.html">layouts/RootLayout</a></li><li><a href="module-main.html">main</a></li><li><a href="module-pages_AdminUserPanel.html">pages/AdminUserPanel</a></li><li><a href="module-pages_CodeReviewPanel.html">pages/CodeReviewPanel</a></li><li><a href="module-pages_CollaborativeCodeEditor.html">pages/CollaborativeCodeEditor</a></li><li><a href="module-pages_Dashboard.html">pages/Dashboard</a></li><li><a href="module-pages_KanbanBoard.html">pages/KanbanBoard</a></li><li><a href="module-pages_LocalTaskBoard.html">pages/LocalTaskBoard</a></li><li><a href="module-pages_MyProjects.html">pages/MyProjects</a></li><li><a href="module-pages_NotFound.html">pages/NotFound</a></li><li><a href="module-pages_PersonalTasksBoard.html">pages/PersonalTasksBoard</a></li><li><a href="module-pages_Profile.html">pages/Profile</a></li><li><a href="module-pages_ProjectDashboard.html">pages/ProjectDashboard</a></li><li><a href="module-pages_ProjectDocumentation.html">pages/ProjectDocumentation</a></li><li><a href="module-pages_ProjectManagementDashboard.html">pages/ProjectManagementDashboard</a></li><li><a href="module-pages_Settings.html">pages/Settings</a></li><li><a href="module-pages_TasksPage.html">pages/TasksPage</a></li><li><a href="module-pages_TeamChatModule.html">pages/TeamChatModule</a></li><li><a href="module-pages_docs_QuickStartGuide.html">pages/docs/QuickStartGuide</a></li><li><a href="module-pages_public__HelpCenter.html">pages/public//HelpCenter</a></li><li><a href="module-pages_public_AIAssistant.html">pages/public/AIAssistant</a></li><li><a href="module-pages_public_Blog.html">pages/public/Blog</a></li><li><a href="module-pages_public_ContactSupport.html">pages/public/ContactSupport</a></li><li><a href="module-pages_public_Features.html">pages/public/Features</a></li><li><a href="module-pages_public_ForDevelopers.html">pages/public/ForDevelopers</a></li><li><a href="module-pages_public_Home.html">pages/public/Home</a></li><li><a href="module-pages_public_PrivacyPolicy.html">pages/public/PrivacyPolicy</a></li><li><a href="module-pages_public_SignIn.html">pages/public/SignIn</a></li><li><a href="module-pages_public_SignUp.html">pages/public/SignUp</a></li><li><a href="module-pages_public_TermsOfService.html">pages/public/TermsOfService</a></li><li><a href="module-pages_public_Testimonials.html">pages/public/Testimonials</a></li><li><a href="module-routes_AdminDashboardRoutes.html">routes/AdminDashboardRoutes</a></li><li><a href="module-routes_AdminRoutes.html">routes/AdminRoutes</a></li><li><a href="module-routes_DashboardRoutes.html">routes/DashboardRoutes</a></li><li><a href="module-routes_IndexRoute.html">routes/IndexRoute</a></li><li><a href="module-routes_ModalRoutes.html">routes/ModalRoutes</a></li><li><a href="module-routes_PublicRoutes.html">routes/PublicRoutes</a></li><li><a href="module-routes_Routes.html">routes/Routes</a></li><li><a href="module-services_assistantService.html">services/assistantService</a></li><li><a href="module-services_auth_handleLoginRedirect.html">services/auth/handleLoginRedirect</a></li><li><a href="module-services_auth_logoutRequest.html">services/auth/logoutRequest</a></li><li><a href="module-services_auth_roleUtils.html">services/auth/roleUtils</a></li><li><a href="module-services_auth_signInAuth.html">services/auth/signInAuth</a></li><li><a href="module-services_auth_signUpAuth.html">services/auth/signUpAuth</a></li><li><a href="module-services_avatarService.html">services/avatarService</a></li><li><a href="module-services_editorServices.html">services/editorServices</a></li><li><a href="module-services_fileService.html">services/fileService</a></li><li><a href="module-services_kanbanService.html">services/kanbanService</a></li><li><a href="module-services_profileService.html">services/profileService</a></li><li><a href="module-services_projectService.html">services/projectService</a></li><li><a href="module-services_taskService.html">services/taskService</a></li><li><a href="module-services_userService.html">services/userService</a></li><li><a href="module-theme.html">theme</a></li><li><a href="module-utils_authUtils.html">utils/authUtils</a></li><li><a href="module-utils_axiosConfig.html">utils/axiosConfig</a></li><li><a href="module-utils_cleanMentorOutput.html">utils/cleanMentorOutput</a></li><li><a href="module-utils_monacoConfig.html">utils/monacoConfig</a></li><li><a href="module-utils_taskUtils.html">utils/taskUtils</a></li><li><a href="module-utils_userToken.html">utils/userToken</a></li><li><a href="module-views_unauthorized.html">views/unauthorized</a></li><li><a href="vite.module_config.html">vite.config</a></li></ul><h3>Classes</h3><ul><li><a href="-_src_server_project.ts_-ConfiguredProject2.html">ConfiguredProject2</a></li><li><a href="-_src_server_project.ts_-ExternalProject2.html">ExternalProject2</a></li><li><a href="-_src_server_project.ts_-InferredProject2.html">InferredProject2</a></li><li><a href="-_src_server_project.ts_-Project3.html">Project3</a></li><li><a href="-_src_server_project.ts_-_AutoImportProviderProject.html">_AutoImportProviderProject</a></li><li><a href="-_src_services_textChanges.ts_-ChangeTracker.html">ChangeTracker</a></li><li><a href="module-components_ErrorBoundaryWrapper-ErrorBoundaryWrapper.html">ErrorBoundaryWrapper</a></li></ul><h3>Events</h3><ul><li><a href="module-utils_userToken.html#~event:onIdTokenChanged">onIdTokenChanged</a></li></ul><h3>Global</h3><ul><li><a href="global.html#FullScreenSpinner">FullScreenSpinner</a></li><li><a href="global.html#ProtectedRoute">ProtectedRoute</a></li><li><a href="global.html#getRedirectForRole">getRedirectForRole</a></li><li><a href="global.html#renderWithRouter">renderWithRouter</a></li><li><a href="global.html#roleRedirects">roleRedirects</a></li><li><a href="global.html#syncUserAndRedirect">syncUserAndRedirect</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="babel.module_config.html">babel.config</a></li><li><a href="eslint.module_config.html">eslint.config</a></li><li><a href="jest.module_config.html">jest.config</a></li><li><a href="jest.module_setup.html">jest.setup</a></li><li><a href="module-ColorModeContext.html">ColorModeContext</a></li><li><a href="module-ThemeWrapper.html">ThemeWrapper</a></li><li><a href="module-auth_roles.html">auth/roles</a></li><li><a href="module-auth_useFirebaseAuth.html">auth/useFirebaseAuth</a></li><li><a href="module-components_AssistantSidebar.html">components/AssistantSidebar</a></li><li><a href="module-components_AuthProviderButton.html">components/AuthProviderButton</a></li><li><a href="module-components_Column.html">components/Column</a></li><li><a href="module-components_ColumnDroppable.html">components/ColumnDroppable</a></li><li><a href="module-components_EditorPanel.html">components/EditorPanel</a></li><li><a href="module-components_ErrorBoundaryWrapper.html">components/ErrorBoundaryWrapper</a></li><li><a href="module-components_FileTree.html">components/FileTree</a></li><li><a href="module-components_Footer.html">components/Footer</a></li><li><a href="module-components_FormCard.html">components/FormCard</a></li><li><a href="module-components_Input.html">components/Input</a></li><li><a href="module-components_KanbanModals.html">components/KanbanModals</a></li><li><a href="module-components_KanbanOverlay.html">components/KanbanOverlay</a></li><li><a href="module-components_KanbanTaskPreview.html">components/KanbanTaskPreview</a></li><li><a href="module-components_KanbanUtils.html">components/KanbanUtils</a></li><li><a href="module-components_Loading.html">components/Loading</a></li><li><a href="module-components_LocalTaskPanel.html">components/LocalTaskPanel</a></li><li><a href="module-components_Logo.html">components/Logo</a></li><li><a href="module-components_OutputPanel.html">components/OutputPanel</a></li><li><a href="module-components_PersonalTaskPreview.html">components/PersonalTaskPreview</a></li><li><a href="module-components_PersonalTasksPanel.html">components/PersonalTasksPanel</a></li><li><a href="module-components_ProjectSelector.html">components/ProjectSelector</a></li><li><a href="module-components_ProjectSummaryDashboard.html">components/ProjectSummaryDashboard</a></li><li><a href="module-components_RedirectHandler.html">components/RedirectHandler</a></li><li><a href="module-components_SortableTask.html">components/SortableTask</a></li><li><a href="module-components_SuspenseWrapper.html">components/SuspenseWrapper</a></li><li><a href="module-components_TaskCard.html">components/TaskCard</a></li><li><a href="module-components_TaskComments.html">components/TaskComments</a></li><li><a href="module-components_TaskFilters.html">components/TaskFilters</a></li><li><a href="module-components_TerminalPanel.html">components/TerminalPanel</a></li><li><a href="module-components_UserProfilePanel.html">components/UserProfilePanel</a></li><li><a href="module-components_modals_AddKanbanTaskModal.html">components/modals/AddKanbanTaskModal</a></li><li><a href="module-components_modals_AddTaskModal.html">components/modals/AddTaskModal</a></li><li><a href="module-components_modals_DeleteTaskModal.html">components/modals/DeleteTaskModal</a></li><li><a href="module-components_modals_EditLocalTaskModal.html">components/modals/EditLocalTaskModal</a></li><li><a href="module-components_modals_EditTaskModal.html">components/modals/EditTaskModal</a></li><li><a href="module-components_modals_LogoutModal.html">components/modals/LogoutModal</a></li><li><a href="module-components_modals_NewKanbanListModal.html">components/modals/NewKanbanListModal</a></li><li><a href="module-components_modals_NewListModal.html">components/modals/NewListModal</a></li><li><a href="module-components_modals_NewProjectModal.html">components/modals/NewProjectModal</a></li><li><a href="module-components_modals_ProjectDetailModal.html">components/modals/ProjectDetailModal</a></li><li><a href="module-components_modals_TaskDetailModal.html">components/modals/TaskDetailModal</a></li><li><a href="module-components_navbar_NavCategory.html">components/navbar/NavCategory</a></li><li><a href="module-components_navbar_Navbar.html">components/navbar/Navbar</a></li><li><a href="module-components_navbar_navDropdowns.html">components/navbar/navDropdowns</a></li><li><a href="module-context_AuthContext.html">context/AuthContext</a></li><li><a href="module-context_AuthProvider.html">context/AuthProvider</a></li><li><a href="module-context_ModalContext.html">context/ModalContext</a></li><li><a href="module-context_ModalProvider.html">context/ModalProvider</a></li><li><a href="module-firebase_auth.html">firebase/auth</a></li><li><a href="module-firebase_authUtils.html">firebase/authUtils</a></li><li><a href="module-hooks_init.html">hooks/init</a></li><li><a href="module-hooks_useAuth.html">hooks/useAuth</a></li><li><a href="module-hooks_useModal.html">hooks/useModal</a></li><li><a href="module-hooks_useUser.html">hooks/useUser</a></li><li><a href="module-hooks_utilsAuth.html">hooks/utilsAuth</a></li><li><a href="module-layouts_PrivateLayout.html">layouts/PrivateLayout</a></li><li><a href="module-layouts_PublicLayout.html">layouts/PublicLayout</a></li><li><a href="module-layouts_RootLayout.html">layouts/RootLayout</a></li><li><a href="module-main.html">main</a></li><li><a href="module-pages_AdminUserPanel.html">pages/AdminUserPanel</a></li><li><a href="module-pages_CodeReviewPanel.html">pages/CodeReviewPanel</a></li><li><a href="module-pages_CollaborativeCodeEditor.html">pages/CollaborativeCodeEditor</a></li><li><a href="module-pages_Dashboard.html">pages/Dashboard</a></li><li><a href="module-pages_KanbanBoard.html">pages/KanbanBoard</a></li><li><a href="module-pages_LocalTaskBoard.html">pages/LocalTaskBoard</a></li><li><a href="module-pages_MyProjects.html">pages/MyProjects</a></li><li><a href="module-pages_NotFound.html">pages/NotFound</a></li><li><a href="module-pages_PersonalTasksBoard.html">pages/PersonalTasksBoard</a></li><li><a href="module-pages_Profile.html">pages/Profile</a></li><li><a href="module-pages_ProjectDashboard.html">pages/ProjectDashboard</a></li><li><a href="module-pages_ProjectDocumentation.html">pages/ProjectDocumentation</a></li><li><a href="module-pages_ProjectManagementDashboard.html">pages/ProjectManagementDashboard</a></li><li><a href="module-pages_Settings.html">pages/Settings</a></li><li><a href="module-pages_TasksPage.html">pages/TasksPage</a></li><li><a href="module-pages_TeamChatModule.html">pages/TeamChatModule</a></li><li><a href="module-pages_docs_QuickStartGuide.html">pages/docs/QuickStartGuide</a></li><li><a href="module-pages_public__HelpCenter.html">pages/public//HelpCenter</a></li><li><a href="module-pages_public_AIAssistant.html">pages/public/AIAssistant</a></li><li><a href="module-pages_public_Blog.html">pages/public/Blog</a></li><li><a href="module-pages_public_ContactSupport.html">pages/public/ContactSupport</a></li><li><a href="module-pages_public_Features.html">pages/public/Features</a></li><li><a href="module-pages_public_ForDevelopers.html">pages/public/ForDevelopers</a></li><li><a href="module-pages_public_Home.html">pages/public/Home</a></li><li><a href="module-pages_public_PrivacyPolicy.html">pages/public/PrivacyPolicy</a></li><li><a href="module-pages_public_SignIn.html">pages/public/SignIn</a></li><li><a href="module-pages_public_SignUp.html">pages/public/SignUp</a></li><li><a href="module-pages_public_TermsOfService.html">pages/public/TermsOfService</a></li><li><a href="module-pages_public_Testimonials.html">pages/public/Testimonials</a></li><li><a href="module-routes_AdminDashboardRoutes.html">routes/AdminDashboardRoutes</a></li><li><a href="module-routes_AdminRoutes.html">routes/AdminRoutes</a></li><li><a href="module-routes_DashboardRoutes.html">routes/DashboardRoutes</a></li><li><a href="module-routes_IndexRoute.html">routes/IndexRoute</a></li><li><a href="module-routes_PublicRoutes.html">routes/PublicRoutes</a></li><li><a href="module-routes_Routes.html">routes/Routes</a></li><li><a href="module-services_assistantService.html">services/assistantService</a></li><li><a href="module-services_auth_handleLoginRedirect.html">services/auth/handleLoginRedirect</a></li><li><a href="module-services_auth_logoutRequest.html">services/auth/logoutRequest</a></li><li><a href="module-services_auth_roleUtils.html">services/auth/roleUtils</a></li><li><a href="module-services_auth_signInAuth.html">services/auth/signInAuth</a></li><li><a href="module-services_auth_signUpAuth.html">services/auth/signUpAuth</a></li><li><a href="module-services_avatarService.html">services/avatarService</a></li><li><a href="module-services_editorServices.html">services/editorServices</a></li><li><a href="module-services_fileService.html">services/fileService</a></li><li><a href="module-services_kanbanService.html">services/kanbanService</a></li><li><a href="module-services_profileService.html">services/profileService</a></li><li><a href="module-services_projectService.html">services/projectService</a></li><li><a href="module-services_taskService.html">services/taskService</a></li><li><a href="module-services_userService.html">services/userService</a></li><li><a href="module-theme.html">theme</a></li><li><a href="module-utils_authUtils.html">utils/authUtils</a></li><li><a href="module-utils_axiosConfig.html">utils/axiosConfig</a></li><li><a href="module-utils_cleanMentorOutput.html">utils/cleanMentorOutput</a></li><li><a href="module-utils_monacoConfig.html">utils/monacoConfig</a></li><li><a href="module-utils_taskUtils.html">utils/taskUtils</a></li><li><a href="module-utils_userToken.html">utils/userToken</a></li><li><a href="module-views_unauthorized.html">views/unauthorized</a></li><li><a href="vite.module_config.html">vite.config</a></li></ul><h3>Classes</h3><ul><li><a href="-_src_server_project.ts_-ConfiguredProject2.html">ConfiguredProject2</a></li><li><a href="-_src_server_project.ts_-ExternalProject2.html">ExternalProject2</a></li><li><a href="-_src_server_project.ts_-InferredProject2.html">InferredProject2</a></li><li><a href="-_src_server_project.ts_-Project3.html">Project3</a></li><li><a href="-_src_server_project.ts_-_AutoImportProviderProject.html">_AutoImportProviderProject</a></li><li><a href="-_src_services_textChanges.ts_-ChangeTracker.html">ChangeTracker</a></li><li><a href="module-components_ErrorBoundaryWrapper-ErrorBoundaryWrapper.html">ErrorBoundaryWrapper</a></li></ul><h3>Events</h3><ul><li><a href="module-utils_userToken.html#~event:onIdTokenChanged">onIdTokenChanged</a></li></ul><h3>Global</h3><ul><li><a href="global.html#FullScreenSpinner">FullScreenSpinner</a></li><li><a href="global.html#ProtectedRoute">ProtectedRoute</a></li><li><a href="global.html#getRedirectForRole">getRedirectForRole</a></li><li><a href="global.html#renderWithRouter">renderWithRouter</a></li><li><a href="global.html#roleRedirects">roleRedirects</a></li><li><a href="global.html#syncUserAndRedirect">syncUserAndRedirect</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Mon Feb 16 2026 22:19:52 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Mon Feb 16 2026 23:09:51 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>

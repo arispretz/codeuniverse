@@ -7,6 +7,7 @@
 import React, { lazy } from 'react';
 import { ProtectedRoute } from './ProtectedRoute.jsx';
 import PrivateLayout from '../layouts/PrivateLayout.jsx';
+import { LogoutModalWrapper } from './ModalRoutes.jsx'; 
 
 // Lazy-loaded route components
 const Dashboard = lazy(() => import('../pages/Dashboard'));
@@ -171,7 +172,7 @@ export const DashboardRoutes = [
         ),
       },
 
-      // ✅ Project-specific routes (added back)
+      // Project-specific routes
       {
         path: 'projects/:id',
         element: (
@@ -219,6 +220,12 @@ export const DashboardRoutes = [
             <KanbanBoard />
           </ProtectedRoute>
         ),
+      },
+
+      // ✅ Logout route
+      {
+        path: 'logout',
+        element: <LogoutModalWrapper />,
       },
     ],
   },
