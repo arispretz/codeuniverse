@@ -1,5 +1,3 @@
-
-
 import React, { lazy } from 'react';
 import { ProtectedRoute } from './ProtectedRoute.jsx';
 import PrivateLayout from '../layouts/PrivateLayout.jsx';
@@ -25,19 +23,22 @@ const QuickStartGuide = lazy(() => import("../pages/docs/QuickStartGuide"));
 export const DashboardRoutes = [
   {
     path: 'dashboard',
-    element: (
-      <ProtectedRoute>
-        <PrivateLayout />
-      </ProtectedRoute>
-    ),
+    element: <PrivateLayout />, 
     children: [
-      { index: true, element: <Dashboard /> },
+      { 
+        index: true, 
+        element: (
+          <ProtectedRoute allowedRoles={['admin','manager','developer','guest']}>
+            <Dashboard />
+          </ProtectedRoute>
+        ) 
+      },
 
       // Developer routes
       {
         path: 'my-projects',
         element: (
-          <ProtectedRoute allowedRoles={['developer', 'admin']}>
+          <ProtectedRoute allowedRoles={['developer','admin']}>
             <MyProjects />
           </ProtectedRoute>
         ),
@@ -45,7 +46,7 @@ export const DashboardRoutes = [
       {
         path: 'personal-tasks',
         element: (
-          <ProtectedRoute allowedRoles={['developer', 'admin']}>
+          <ProtectedRoute allowedRoles={['developer','admin']}>
             <PersonalTaskBoard />
           </ProtectedRoute>
         ),
@@ -55,7 +56,7 @@ export const DashboardRoutes = [
       {
         path: 'project-dashboard',
         element: (
-          <ProtectedRoute allowedRoles={['manager', 'admin']}>
+          <ProtectedRoute allowedRoles={['manager','admin']}>
             <ProjectDashboard />
           </ProtectedRoute>
         ),
@@ -63,7 +64,7 @@ export const DashboardRoutes = [
       {
         path: 'manager/projects',
         element: (
-          <ProtectedRoute allowedRoles={['manager', 'admin']}>
+          <ProtectedRoute allowedRoles={['manager','admin']}>
             <ProjectManagementDashboard />
           </ProtectedRoute>
         ),
@@ -83,23 +84,93 @@ export const DashboardRoutes = [
       {
         path: 'quick-start-guide',
         element: (
-          <ProtectedRoute allowedRoles={['guest', 'developer', 'manager', 'admin']}>
+          <ProtectedRoute allowedRoles={['guest','developer','manager','admin']}>
             <QuickStartGuide />
           </ProtectedRoute>
         ),
       },
 
-      // Common routes (todos los roles autenticados)
-      { path: 'team-chat', element: <TeamChatModule /> },
-      { path: 'settings', element: <Settings /> },
-      { path: 'profile', element: <Profile /> },
-      { path: 'project-docs', element: <ProjectDocumentation /> },
-      { path: 'code-review', element: <CodeReviewPanel /> },
-      { path: 'editor', element: <ProjectSelector /> },
-      { path: 'projects/:id/editor', element: <CollaborativeCodeEditor /> },
-      { path: 'kanban', element: <KanbanBoard /> },
-      { path: 'local-task-board', element: <LocalTaskBoard /> },
-      { path: 'projects/:id', element: <TasksPage /> },
+      // Common routes
+      {
+        path: 'team-chat',
+        element: (
+          <ProtectedRoute allowedRoles={['admin','manager','developer']}>
+            <TeamChatModule />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'settings',
+        element: (
+          <ProtectedRoute allowedRoles={['admin','manager','developer','guest']}>
+            <Settings />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'profile',
+        element: (
+          <ProtectedRoute allowedRoles={['admin','manager','developer','guest']}>
+            <Profile />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'project-docs',
+        element: (
+          <ProtectedRoute allowedRoles={['admin','manager','developer']}>
+            <ProjectDocumentation />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'code-review',
+        element: (
+          <ProtectedRoute allowedRoles={['admin','developer']}>
+            <CodeReviewPanel />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'editor',
+        element: (
+          <ProtectedRoute allowedRoles={['admin','developer']}>
+            <ProjectSelector />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'projects/:id/editor',
+        element: (
+          <ProtectedRoute allowedRoles={['admin','developer']}>
+            <CollaborativeCodeEditor />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'kanban',
+        element: (
+          <ProtectedRoute allowedRoles={['admin','manager','developer']}>
+            <KanbanBoard />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'local-task-board',
+        element: (
+          <ProtectedRoute allowedRoles={['admin','manager','developer']}>
+            <LocalTaskBoard />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'projects/:id',
+        element: (
+          <ProtectedRoute allowedRoles={['admin','manager','developer']}>
+            <TasksPage />
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
 ];
