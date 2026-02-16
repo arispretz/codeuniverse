@@ -18,7 +18,7 @@ export async function syncUserAndRedirect(
 ) {
   try {
     // 🔑 Get Firebase ID token and store in localStorage
-    const token = await firebaseUser.getIdToken(true);
+    const token = await firebaseUser.getIdToken();
     localStorage.setItem("token", token);
 
     let userData;
