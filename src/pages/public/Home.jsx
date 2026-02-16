@@ -5,7 +5,7 @@
  * @module pages/public/Home
  */
 
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Container,
   Typography,
