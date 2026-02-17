@@ -27,6 +27,7 @@ import PersonalTaskPreview from '../components/PersonalTaskPreview.jsx';
 import LocalTaskPanel from '../components/LocalTaskPanel.jsx';
 import KanbanTaskPreview from '../components/KanbanTaskPreview.jsx';
 import { getCurrentUser } from '../services/userService.js';
+import { getUserToken } from "../utils/userToken.js";
 
 /**
  * Dashboard component.
@@ -77,6 +78,12 @@ const Dashboard = () => {
     setShowSnackbar(true);
     setTimeout(() => setRefreshMessage(''), 3000);
   };
+
+
+  async function testToken() {
+    const token = await getUserToken(true); 
+    console.log("Firebase ID token:", token);
+  }
 
   if (loading) {
     return (
@@ -183,6 +190,8 @@ const Dashboard = () => {
           {refreshMessage}
         </Typography>
       )}
+
+       <button onClick={handleTestToken}>Testing Firebase Token</button>
 
       <Snackbar
         open={showSnackbar}
