@@ -79,16 +79,6 @@ const Dashboard = () => {
     setTimeout(() => setRefreshMessage(''), 3000);
   };
 
-  const handleTestToken = async () => {
-    const token = await getUserToken(true); 
-    if (token) {
-      console.log("Firebase ID token:", token);
-      alert("Look at the token printend in the console");
-    } else {
-      alert("⚠️ No hay usuario autenticado");
-    }
-  };
-
   if (loading) {
     return (
       <Box sx={{ py: 6, textAlign: 'center' }}>
@@ -194,8 +184,6 @@ const Dashboard = () => {
           {refreshMessage}
         </Typography>
       )}
-
-       <button onClick={handleTestToken}>Testing Firebase Token</button>
 
       <Snackbar
         open={showSnackbar}
