@@ -79,11 +79,15 @@ const Dashboard = () => {
     setTimeout(() => setRefreshMessage(''), 3000);
   };
 
-
-  async function testToken() {
+  const handleTestToken = async () => {
     const token = await getUserToken(true); 
-    console.log("Firebase ID token:", token);
-  }
+    if (token) {
+      console.log("Firebase ID token:", token);
+      alert("Look at the token printend in the console");
+    } else {
+      alert("⚠️ No hay usuario autenticado");
+    }
+  };
 
   if (loading) {
     return (
