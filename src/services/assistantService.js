@@ -29,7 +29,7 @@ export async function getAssistantReply(payload) {
     headers: { Authorization: `Bearer ${token}` },
     timeout: 120000,
   });
-  return data.response || data.reply;
+  return data.reply;
 }
 
 /**
