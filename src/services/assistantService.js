@@ -27,7 +27,7 @@ export async function getAssistantReply(payload) {
 
   const { data } = await axios.post(`${BASE_URL}/api/assistant/reply`, payload, {
     headers: { Authorization: `Bearer ${token}` },
-    timeout: 120000,
+    timeout: 240000,
   });
   return data.reply;
 }
@@ -41,7 +41,7 @@ export async function getAssistantCodeReply(payload) {
 
   const { data } = await axios.post(`${BASE_URL}/api/assistant/reply-code-only`, payload, {
     headers: { Authorization: `Bearer ${token}` },
-    timeout: 120000,
+    timeout: 240000,
   });
   return data.code;
 }
