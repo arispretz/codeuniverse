@@ -37,7 +37,6 @@ const ProjectDetailModal = ({ open, onClose, projectId }) => {
       if (!projectId) return;
       try {
         const data = await getProjectFullById(projectId);
-        console.log("📦 Proyecto recibido:", data);
         setProject(data);
       } catch (err) {
         console.error("❌ Error fetching project details:", err);

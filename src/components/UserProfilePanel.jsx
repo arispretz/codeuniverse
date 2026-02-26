@@ -1,11 +1,10 @@
 /**
  * @fileoverview UserProfilePanel component.
- * Displays the user's profile information, preferred coding style, and personalized tips.
+ * Displays the user's profile information and preferred coding style.
  * Allows updating the preferred coding style via a dropdown selector.
  *
  * Integrates with `profileService` to:
  * - Fetch user profile data (`getUserProfile`)
- * - Fetch personalized tips (`getUserTips`)
  * - Update preferred coding style (`updateUserStyle`)
  *
  * @module components/UserProfilePanel
@@ -18,12 +17,10 @@ import {
   Select,
   MenuItem,
   Paper,
-  Alert,
 } from "@mui/material";
 
 import {
   getUserProfile,
-  getUserTips,
   updateUserStyle,
 } from "../services/profileService.js";
 
@@ -39,11 +36,10 @@ import {
 const UserProfilePanel = () => {
   const [profile, setProfile] = useState(null);
   const [style, setStyle] = useState("");
-  const [tips, setTips] = useState([]);
 
   useEffect(() => {
     /**
-     * Fetches user profile and tips from backend service.
+     * Fetches user profile from backend service.
      *
      * @async
      * @function fetchData
@@ -54,11 +50,8 @@ const UserProfilePanel = () => {
         const profileData = await getUserProfile();
         setProfile(profileData);
         setStyle(profileData.preferred_style);
-
-        const tipsData = await getUserTips();
-        setTips(tipsData);
       } catch (err) {
-        console.error("❌ Error loading profile or tips:", err);
+        console.error("❌ Error loading profile:", err);
       }
     };
     fetchData();
@@ -111,18 +104,6 @@ const UserProfilePanel = () => {
             Last used: {new Date(profile.last_used).toLocaleString()}
           </Typography>
         </>
-      )}
-
-      {/* Personalized tips */}
-      {tips.length > 0 && (
-        <Box mt={3}>
-          <Typography variant="subtitle1">🧠 Suggestions for you</Typography>
-          {tips.map((tip, i) => (
-            <Alert key={i} severity="info" sx={{ mt: 1 }}>
-              {tip}
-            </Alert>
-          ))}
-        </Box>
       )}
     </Paper>
   );

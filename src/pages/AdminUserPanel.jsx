@@ -89,7 +89,6 @@ const AdminUserPanel = ({ idToken, currentUser }) => {
 
   // Team change
   const confirmTeamChange = (user, team) => {
-    console.log("User selected to change team.", user);
     setSelectedTeamUser(user);
     setNewTeam(team);
     setOpenTeamDialog(true);

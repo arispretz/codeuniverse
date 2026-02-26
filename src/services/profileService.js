@@ -42,29 +42,6 @@ export async function getUserProfile(uid) {
 }
 
 /**
- * Fetch user tips by UID.
- *
- * @async
- * @function getUserTips
- * @param {string} uid - Firebase UID of the user.
- * @returns {Promise<Array<Object>>} List of tips for the user.
- * @throws {Error} If user is not authenticated or request fails.
- *
- * @example
- * const tips = await getUserTips("uid123");
- * tips.forEach(t => console.log(t.message));
- */
-export async function getUserTips(uid) {
-  const token = await getUserToken(true);
-  if (!token) throw new Error("User not authenticated");
-
-  const { data } = await axios.get(`${BASE_URL}/api/user-tips/${uid}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  return data;
-}
-
-/**
  * Update user's preferred coding style.
  *
  * @async

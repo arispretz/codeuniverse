@@ -9,10 +9,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/codeuniverse-frontend.git"
+    "url": "https://github.com/arispretz/codeuniverse-frontend.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/codeuniverse-frontend/issues"
+    "url": "https://github.com/arispretz/codeuniverse-frontend/issues"
   },
   "scripts": {
     "dev": "vite --host",

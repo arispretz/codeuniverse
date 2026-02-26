@@ -46,7 +46,6 @@ export const AdminRoutes = ({ children }) => {
 
   // 🚫 Redirect if user is not authenticated or not an admin
   if (!isAuthenticated || role !== 'admin') {
-    console.log('🔐 ProtectedRoute:', { role, isAuthenticated, loading });
     return <Navigate to="/unauthorized" replace />;
   }
 

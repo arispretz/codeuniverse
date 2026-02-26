@@ -17,7 +17,7 @@
  *
  * // Retrieve user
  * const user = getUserFromStorage();
- * console.log(user?.name); // "Ariana"
+ * console.log(user?.name); 
  */
 export const getUserFromStorage = () => {
   try {

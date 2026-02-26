@@ -247,7 +247,7 @@ const KanbanBoard = () => {
     try {
       await deleteKanbanTask(task._id);
       setAllTasks((prev) => prev.filter((t) => t._id !== task._id));
-            enqueueSnackbar(`Task "${task.title}" deleted ✅`, { variant: "success" });
+      enqueueSnackbar(`Task "${task.title}" deleted ✅`, { variant: "success" });
     } catch (err) {
       console.error("Error deleting task:", err);
       enqueueSnackbar("Error deleting the task", { variant: "error" });
