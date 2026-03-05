@@ -43,7 +43,6 @@ const AdminUserPanel = ({ idToken, currentUser }) => {
   const fetchUsers = useCallback(async () => {
     try {
       const res = await getAllUsers();
-      console.log('Users from API:', res);
       const sorted = Array.isArray(res)
         ? [...res].sort((a, b) => new Date(b.joinedAt) - new Date(a.joinedAt))
         : [];
