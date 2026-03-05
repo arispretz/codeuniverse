@@ -43,6 +43,7 @@ const AdminUserPanel = ({ idToken, currentUser }) => {
   const fetchUsers = useCallback(async () => {
     try {
       const res = await getAllUsers();
+      console.log('Users from API:', res);
       setUsers(Array.isArray(res) ? res : []);
     } catch (err) {
       console.error('❌ Failed to fetch users:', err);
