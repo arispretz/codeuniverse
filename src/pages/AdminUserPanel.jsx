@@ -44,7 +44,10 @@ const AdminUserPanel = ({ idToken, currentUser }) => {
     try {
       const res = await getAllUsers();
       console.log('Users from API:', res);
-      setUsers(Array.isArray(res) ? res : []);
+      const sorted = Array.isArray(res)
+        ? [...res].sort((a, b) => new Date(b.joinedAt) - new Date(a.joinedAt))
+        : [];
+      setUsers(sorted);
     } catch (err) {
       console.error('❌ Failed to fetch users:', err);
       setSnack({ open: true, message: 'Failed to load users', severity: 'error' });
@@ -140,7 +143,7 @@ const AdminUserPanel = ({ idToken, currentUser }) => {
             </TableRow>
           ) : (
             paginatedUsers.map(user => (
-              <TableRow key={user._id}>
+              <TableRow key={user.firebaseUid}>
                 <TableCell>{user.username || user.email}</TableCell>
                 <TableCell>{user.email}</TableCell>
                 <TableCell>{user.username ? '✅ Yes' : '❌ No'}</TableCell>
@@ -162,11 +165,11 @@ const AdminUserPanel = ({ idToken, currentUser }) => {
                     value={user.team || ''}
                     onChange={(e) => confirmTeamChange(user, e.target.value)} 
                   >
-                  <MenuItem value="">None</MenuItem>
+                    <MenuItem value="">None</MenuItem>
                     {validTeams.map(team => (
-                  <MenuItem key={team} value={team}>{team}</MenuItem>
-                ))}
-                    </Select>
+                      <MenuItem key={team} value={team}>{team}</MenuItem>
+                    ))}
+                  </Select>
                 </TableCell>
               </TableRow>
             ))
